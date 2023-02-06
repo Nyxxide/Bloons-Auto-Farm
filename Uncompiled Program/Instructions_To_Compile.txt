@@ -1,0 +1,23 @@
+1) Get python from this link:
+
+	https://www.python.org/ftp/python/3.11.1/python-3.11.1-amd64.exe
+
+2) Locate the directory with pip.exe
+
+3) Open 'cmd' and cd into the directory
+
+	cd C:\Users\'user'\path\to\directory
+
+4) Install pyinstaller with pip in the terminal:
+
+	pip install pyinstaller
+
+5) Cd into the 'Uncompiled Program' directory:
+
+	cd C:\Users\'user'\path\to\Uncompiled Program
+
+6) Compile with pyinstall:
+
+	pyinstall compile.spec
+
+
