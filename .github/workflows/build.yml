@@ -29,7 +29,7 @@ jobs:
 
       - name: Release
         run: |
-          hub release create ${{ steps.output_run_id.outputs.run_id }} -m latest -a dist/BloonsFarmUI
+          hub release create ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUI
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
