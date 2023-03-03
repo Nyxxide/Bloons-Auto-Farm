@@ -4,9 +4,9 @@ on:
     branches: [ main ]
 
 jobs:
-  run_tests:
-    name: Build and Release
-    runs-on: ubuntu-22.04
+  build_linux:
+    name: Build and Release (Linux)
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [ '3.x' ]
@@ -33,11 +33,60 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      #- name: Release
-      #  if: startsWith(github.ref, 'refs/heads/release/')
-      #  uses: softprops/action-gh-release@v1
-      #  with:
-      #    name: latest
-      #    files: dist/BloonsFarmUI
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  build_windows:
+    name: Build and Release (Windows)
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: [ '3.x' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Compile with PyInstaller
+        run: pyinstaller compile.spec
+
+      - name: Release
+        run: |
+          hub release create ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  build_macos:
+    name: Build and Release (MacOS)
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: [ '3.x' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Compile with PyInstaller
+        run: pyinstaller compile.spec
+
+      - name: Release
+        run: |
+          hub release create ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
