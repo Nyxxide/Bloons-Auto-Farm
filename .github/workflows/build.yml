@@ -26,3 +26,10 @@ jobs:
 
       - name: Compile with PyInstaller
         run: pyinstaller compile.spec
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/BloonsFarmUI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
