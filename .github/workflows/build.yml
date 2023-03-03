@@ -58,7 +58,7 @@ jobs:
 
       - name: Release
         run: |
-          hub release create ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUI
+          hub release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUI.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
@@ -87,6 +87,6 @@ jobs:
 
       - name: Release
         run: |
-          hub release create ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUI
+          hub release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUI#Mac_Bloons
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
