@@ -18,6 +18,11 @@ from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxL
     QMainWindow, QMenu
 import CoordinateHandler
 
+#TODO: rework actual bloons interface to run as a while-loop that interfaces with a json file full of data
+#TODO: rework json file construction
+#TODO: add functionality to the secondary windows to edit tower positions
+
+
 class BloonsAutoFarm:
     def __init__(self):
         # Window UI setup junk

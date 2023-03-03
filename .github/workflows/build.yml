@@ -28,8 +28,16 @@ jobs:
         run: pyinstaller compile.spec
 
       - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: dist/BloonsFarmUI
+        run: |
+          hub release create latest -m latest dist/BloonsFarmUI
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      #- name: Release
+      #  if: startsWith(github.ref, 'refs/heads/release/')
+      #  uses: softprops/action-gh-release@v1
+      #  with:
+      #    name: latest
+      #    files: dist/BloonsFarmUI
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
