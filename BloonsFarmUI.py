@@ -15,7 +15,9 @@ import keyboard
 import json
 from PySide6.QtGui import QFontDatabase, QFont, QAction, QIcon
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QMenuBar, \
-    QMainWindow, QMenu
+    QMainWindow, QMenu, QDialog
+from pynput import mouse
+
 import CoordinateHandler
 
 #TODO: rework actual bloons interface to run as a while-loop that interfaces with a json file full of data
@@ -25,19 +27,11 @@ import CoordinateHandler
 
 class BloonsAutoFarm:
     def __init__(self):
-        # Window UI setup junk
+        # Main Window UI setup junk
         self.BloonsUI = QApplication([])
         self.mainwindow = QMainWindow()
         self.mainwindow.setWindowTitle('Bloons Auto Farm')
         self.mainwindow.setGeometry(550, 250, 800, 600)
-
-        self.editdef = QMainWindow()
-        self.editdef.setWindowTitle('Deflation')
-        self.editdef.setGeometry(550, 250, 400, 300)
-
-        self.editdef2x = QMainWindow()
-        self.editdef2x.setWindowTitle('Deflation 2x Cash')
-        self.editdef2x.setGeometry(550, 250, 400, 300)
 
         self.window = QWidget()
 
@@ -49,12 +43,41 @@ class BloonsAutoFarm:
         self.def2xhboxtop = QHBoxLayout()
         self.def2xhboxbot = QHBoxLayout()
 
+        # Secondary Window UI setup junk
+        self.editdef = QDialog()
+        self.editdef.setWindowTitle('Deflation')
+        self.editdef.setGeometry(550, 250, 400, 300)
+        self.editdef.setModal(True)
+
+
+        self.editdef2x = QDialog()
+        self.editdef2x.setWindowTitle('Deflation 2x Cash')
+        self.editdef2x.setGeometry(550, 250, 400, 300)
+        self.editdef2x.setModal(True)
+
+
+        self.deflayout = QHBoxLayout()
+        self.def2xlayout = QHBoxLayout()
+
+        self.defvbox = QVBoxLayout()
+        self.def2xvbox = QVBoxLayout()
+
+        # Error Window setup junk
+        self.error = QDialog()
+        self.error.setWindowTitle("Error")
+        self.error.setGeometry(550, 250, 300, 100)
+        self.error.setModal(True)
+
+        self.errorlayout = QVBoxLayout()
+        self.errorhbox = QHBoxLayout()
+
+
         # Font setup
         self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
         self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
         self.custom_font = QFont(self.font_name)
 
-        # Add label widgets
+        # Add main window label widgets
         self.mainlabel = QLabel('Choose your desired farming method', parent=self.window)
         self.mainlabel.setFixedSize(600,50)
         self.custom_font.setPointSize(24)
@@ -72,6 +95,14 @@ class BloonsAutoFarm:
         self.deflation2xlabel.setFont(self.custom_font)
         self.deflation2xlabel.hide()
 
+        # Add sub window label widgets
+        self.subwinlab = QLabel("Select a tower to change it's position:")
+
+        # Add error window label widget
+        self.errorlabel = QLabel("Error! coordinate file not found! (Run one of the default farms first)", parent=self.error)
+        self.custom_font.setPointSize(10.5)
+        self.errorlabel.setFont(self.custom_font)
+
         # Add a menu bar
         self.menubar = QMenuBar()
         self.editmenu = QMenu("Edit", self.menubar)
@@ -87,7 +118,7 @@ class BloonsAutoFarm:
         self.deflation_action.triggered.connect(self.editdeflation)
         self.deflation2x_action.triggered.connect(self.editdeflation2x)
 
-        # Add button widgets
+        # Add button widgets to main window
         self.defbutton = QPushButton('Deflation', parent=self.window)
         self.defbutton.setFixedSize(200, 100)
         self.custom_font.setPointSize(20)
@@ -106,6 +137,76 @@ class BloonsAutoFarm:
         self.quitbutton.setFont(self.custom_font)
         self.quitbutton.setFixedSize(200, 100)
         self.quitbutton.clicked.connect(self.quit)
+
+        # Add button widgets to sub windows
+        self.snip = QPushButton("Reset Sniper Pos", parent=self.editdef2x)
+        self.snip.setFixedSize(200, 50)
+        self.custom_font.setPointSize(15)
+        self.snip.setFont(self.custom_font)
+        self.snip.clicked.connect(self.resetPos)
+
+        self.alch = QPushButton("Reset Alchemist Pos", parent=self.editdef2x)
+        self.alch.setFixedSize(200, 50)
+        self.custom_font.setPointSize(13)
+        self.alch.setFont(self.custom_font)
+        self.alch.clicked.connect(self.resetPos)
+
+        self.vil = QPushButton("Reset Village Pos", parent=self.editdef2x)
+        self.vil.setFixedSize(200, 50)
+        self.custom_font.setPointSize(15)
+        self.vil.setFont(self.custom_font)
+        self.vil.clicked.connect(self.resetPos)
+
+        self.nintop = QPushButton("Reset Top Ninja Pos", parent=self.editdef)
+        self.nintop.setFixedSize(200, 50)
+        self.custom_font.setPointSize(15)
+        self.nintop.setFont(self.custom_font)
+        self.nintop.clicked.connect(self.resetPos)
+
+        self.alchtop = QPushButton("Reset Top Alchemist Pos", parent=self.editdef)
+        self.alchtop.setFixedSize(200, 50)
+        self.custom_font.setPointSize(12)
+        self.alchtop.setFont(self.custom_font)
+        self.alchtop.clicked.connect(self.resetPos)
+
+        self.ninbottom = QPushButton("Reset Bottom Ninja Pos", parent=self.editdef)
+        self.ninbottom.setFixedSize(200, 50)
+        self.custom_font.setPointSize(12)
+        self.ninbottom.setFont(self.custom_font)
+        self.ninbottom.clicked.connect(self.resetPos)
+
+        self.alchbottom = QPushButton("Reset Bottom Alchemist Pos", parent=self.editdef)
+        self.alchbottom.setFixedSize(200, 50)
+        self.custom_font.setPointSize(10)
+        self.alchbottom.setFont(self.custom_font)
+        self.alchbottom.clicked.connect(self.resetPos)
+
+        # Add Widgets and set up layout of sub windows
+        self.defvbox.addWidget(self.nintop)
+        self.defvbox.addWidget(self.ninbottom)
+        self.defvbox.addWidget(self.alchtop)
+        self.defvbox.addWidget(self.alchbottom)
+
+        self.def2xvbox.addWidget(self.snip)
+        self.def2xvbox.addWidget(self.alch)
+        self.def2xvbox.addWidget(self.vil)
+
+        self.deflayout.addLayout(self.defvbox)
+        self.def2xlayout.addLayout(self.def2xvbox)
+
+        # Add Widgets and set up layout of error window
+        self.errorhbox.addWidget(self.errorlabel)
+        self.errorlayout.addLayout(self.errorhbox)
+
+        # Finalize and setup of sub windows
+        self.editdef.setLayout(self.deflayout)
+
+        self.editdef2x.setLayout(self.def2xlayout)
+
+
+        # Finalize UI setup of error window
+        self.error.setLayout(self.errorlayout)
+
 
         # Add Widgets and set up layout of main UI page
         self.mainhboxtop.addWidget(self.mainlabel)
@@ -146,6 +247,10 @@ class BloonsAutoFarm:
         self.alchtopy = 0
         self.alchbottomx = 0
         self.alchbottomy = 0
+
+        # Reset Coordinates
+        self.x = 0;
+        self.y = 0;
         
         # Thread setup
         self.running = False
@@ -367,14 +472,41 @@ class BloonsAutoFarm:
             time.sleep(0.5)
             pyautogui.click(x_fact * 693, y_fact * 851)
 
+
+
+    def resetPos(self):
+        try:
+            with open('towerpos.json') as f:
+                def on_click(self,x,y,button,pressed):
+                    self.x = x
+                    self.y = y
+                    if pressed:
+                        return False
+
+                button_name = self.editdef.sender().text()
+                with open('towerpos.json', 'r+') as f:
+                    pos = json.load(f)
+                    pos[button_name] = self.x
+                    pos[button_name] = self.y
+                    f.seek(0)
+                    json.dump(pos)
+
+                with mouse.Listener(on_click=on_click) as listener:
+                    listener.join()
+        except FileNotFoundError:
+            self.error.show()
+
     # Define menu functionality
     def editdeflation(self):
         self.editdef.show()
 
+
     def editdeflation2x(self):
         self.editdef2x.show()
 
-    # Define button functionality
+
+
+    # Define button functionality for main window
     def deflationpress(self):
         self.running = True
         self.deflationlabel.show()
@@ -404,25 +536,18 @@ class BloonsAutoFarm:
         self.defbutton.show()
         self.def2xbutton.show()
         self.thread.join()
-    
+
     # Writing and handling tower coordinates
     def coordinateHandler(self):
         with open('towerpos.json', 'r') as f:
             pos = json.load(f)
-        self.snipx = pos['snipx']
-        self.snipy = pos['snipy']
-        self.alchx = pos['alchx']
-        self.alchy = pos['alchy']
-        self.vilx = pos['vilx']
-        self.vily = pos['vily']
-        self.nintopx = pos['nintopx']
-        self.nintopy = pos['nintopy']
-        self.ninbottomx = pos['ninbottomx']
-        self.ninbottomy = pos['ninbottomy']
-        self.alchtopx = pos['alchtopx']
-        self.alchtopy = pos['alchtopy']
-        self.alchbottomx = pos['alchbottomx']
-        self.alchbottomy = pos['alchbottomy']
+        self.snipx, self.snipy = pos['snip']
+        self.alchx, self.alchy = pos['alch']
+        self.vilx, self.vily= pos['vil']
+        self.nintopx, self.nintopy = pos['nintop']
+        self.ninbottomx, self.ninbottomy = pos['ninbottom']
+        self.alchtopx, self.alchtopy = pos['alchtop']
+        self.alchbottomx, self.alchbottomy = pos['alchbottom']
 
     # Finding file path for assets
     def resolve_path(self, path):

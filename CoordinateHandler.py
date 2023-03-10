@@ -15,21 +15,14 @@ def main():
 
     pos = {
 
-        "snipx": (towerx_fact * 1608),
-        "snipy": (towery_fact * 501),
-        "alchx": (towerx_fact * 1551),
-        "alchy": (towery_fact * 544),
-        "vilx": (towerx_fact * 1581),
-        "vily": (towery_fact * 622),
+        "snip": ((towerx_fact * 1608),(towery_fact * 501)),
+        "alch": ((towerx_fact * 1551),(towery_fact * 544)),
+        "vil": ((towerx_fact * 1581),(towery_fact * 622)),
 
-        "nintopx": (towerx_fact * 824),
-        "nintopy": (towery_fact * 366),
-        "alchtopx": (towerx_fact * 831),
-        "alchtopy": (towery_fact * 307),
-        "alchbottomx": (towerx_fact * 834),
-        "alchbottomy": (towery_fact * 764),
-        "ninbottomx": (towerx_fact * 835),
-        "ninbottomy": (towery_fact * 696)
+        "nintop": ((towerx_fact * 824),(towery_fact * 366)),
+        "alchtop": ((towerx_fact * 831),(towery_fact * 307)),
+        "alchbottom": ((towerx_fact * 834),(towery_fact * 764)),
+        "ninbottom": ((towerx_fact * 835),(towery_fact * 696))
     }
 
     with open('towerpos.json', 'w') as f:
