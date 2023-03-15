@@ -26,12 +26,120 @@ import CoordinateHandler
 #TODO: rework json file construction
 #TODO: add functionality to the secondary windows to edit tower positions
 
+class BloonsUIError(QMainWindow):
+    def __init__(self, title, errormessage):
+        super().__init__()
+        # Error Window setup junk
+        self.setWindowTitle(title)
+        self.setGeometry(550, 250, 300, 100)
+        self.setWindowModality(Qt.WindowModality.ApplicationModal)
+        self.errorwindow = QWidget()
+        self.errorlayout = QVBoxLayout()
+        self.errorhbox = QHBoxLayout()
 
+        # Font setup
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
+        self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
+        self.custom_font = QFont(self.font_name)
+
+        # Add error window label widget
+        self.errorlabel = QLabel(errormessage, parent=self)
+        self.custom_font.setPointSize(10.5)
+        self.errorlabel.setFont(self.custom_font)
+
+        # Add Widgets and set up layout of error window
+        self.errorhbox.addWidget(self.errorlabel)
+        self.errorlayout.addLayout(self.errorhbox)
+
+    # Finding file path for assets
+    def resolve_path(self, path):
+        if getattr(sys, "frozen", False):
+            # If the 'frozen' flag is set, we are in bundled-app mode!
+            resolved_path = os.path.abspath(os.path.join(sys._MEIPASS, path))
+        else:
+            # Normal development mode. Use os.getcwd() or __file__ as appropriate in your case...
+            resolved_path = os.path.abspath(os.path.join(os.getcwd(), path))
+
+        return resolved_path
+
+class BloonsUISub(QMainWindow):
+    def __init__(self, title, button_labels):
+        super().__init__()
+        # Secondary Window UI setup junk
+        self.setWindowTitle(title)
+        self.setGeometry(550, 250, 400, 300)
+        self.setWindowModality(Qt.WindowModality.ApplicationModal)
+        self.sub = QWidget()
+        self.sublayout = QHBoxLayout()
+        self.subvbox = QVBoxLayout()
+
+        # Font setup
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
+        self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
+        self.custom_font = QFont(self.font_name)
+
+        # Add sub window label widgets
+        self.subwinlab = QLabel("Select a tower to change it's position:", parent=self)
+        self.custom_font.setPointSize(15)
+        self.subwinlab.setFont(self.custom_font)
+
+        # Add Widgets and set up layout of sub windows
+        self.sublayout.addLayout(self.subvbox)
+        self.subvbox.addWidget(self.subwinlab)
+
+        # Create sub window buttons and add them to layout
+        self.buttons = []
+        for labels, i in enumerate(button_labels):
+            self.buttons[i] = QPushButton(labels, parent=self)
+            self.buttons[i].setFixedSize(200, 50)
+            self.custom_font.setPointSize(15)
+            self.buttons[i].setFont(self.custom_font)
+            self.buttons[i].clicked.connect(self.resetPos)
+            self.subvbox.addWidget(self.buttons[i])
+
+        # Finalize and setup of sub windows
+        self.sub.setLayout(self.sublayout)
+        self.setCentralWidget(self.sub)
+
+    # Function for finding file path for assets
+    def resolve_path(self, path):
+        if getattr(sys, "frozen", False):
+            # If the 'frozen' flag is set, we are in bundled-app mode!
+            resolved_path = os.path.abspath(os.path.join(sys._MEIPASS, path))
+        else:
+            # Normal development mode. Use os.getcwd() or __file__ as appropriate in your case...
+            resolved_path = os.path.abspath(os.path.join(os.getcwd(), path))
+
+        return resolved_path
+
+    # Function for resetting tower positions
+    def resetPos(self):
+        try:
+            with open('towerpos.json') as f:
+                def on_click(self,x,y,button,pressed):
+                    self.x = x
+                    self.y = y
+                    if pressed:
+                        return False
+
+                button_name = self.sender().text().lower().replace(' ', '_')
+                with open('towerpos.json', 'r+') as f:
+                    pos = json.load(f)
+                    pos[button_name] = self.x
+                    pos[button_name] = self.y
+                    f.seek(0)
+                    json.dump(pos)
+
+                with mouse.Listener(on_click=on_click) as listener:
+                    listener.join()
+        except FileNotFoundError:
+            error = BloonsUIError("No File Found", "Error! coordinate file not found! (Run one of the default farms first)")
+            error.show()
 class BloonsUIMain(QMainWindow):
     def __init__(self):
+        self.BloonsUI = QApplication([])
         super().__init__()
         # Main Window UI setup junk
-        self.BloonsUI = QApplication([])
         self.setWindowTitle('Bloons Auto Farm')
         self.setGeometry(550, 250, 800, 600)
         self.window = QWidget()
@@ -441,116 +549,3 @@ class BloonsUIMain(QMainWindow):
 if __name__ == "__main__":
     BloonsUI = BloonsUIMain()
     BloonsUI.run()
-
-class BloonsUISub(QMainWindow):
-    def __init__(self, title, button_labels):
-        super().__init__()
-        # Secondary Window UI setup junk
-        self.subwindowUI = QApplication()
-        self.setWindowTitle(title)
-        self.setGeometry(550, 250, 400, 300)
-        self.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.sub = QWidget()
-        self.sublayout = QHBoxLayout()
-        self.subvbox = QVBoxLayout()
-
-        # Font setup
-        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
-        self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
-        self.custom_font = QFont(self.font_name)
-
-        # Add sub window label widgets
-        self.subwinlab = QLabel("Select a tower to change it's position:", parent=self)
-        self.custom_font.setPointSize(15)
-        self.subwinlab.setFont(self.custom_font)
-
-        # Add Widgets and set up layout of sub windows
-        self.sublayout.addLayout(self.subvbox)
-        self.subvbox.addWidget(self.subwinlab)
-
-        # Create sub window buttons and add them to layout
-        self.buttons = []
-        for labels, i in enumerate(button_labels):
-            self.buttons[i] = QPushButton(labels, parent=self)
-            self.buttons[i].setFixedSize(200, 50)
-            self.custom_font.setPointSize(15)
-            self.buttons[i].setFont(self.custom_font)
-            self.buttons[i].clicked.connect(self.resetPos)
-            self.subvbox.addWidget(self.buttons[i])
-
-        # Finalize and setup of sub windows
-        self.sub.setLayout(self.sublayout)
-        self.setCentralWidget(self.sub)
-
-    # Function for finding file path for assets
-    def resolve_path(self, path):
-        if getattr(sys, "frozen", False):
-            # If the 'frozen' flag is set, we are in bundled-app mode!
-            resolved_path = os.path.abspath(os.path.join(sys._MEIPASS, path))
-        else:
-            # Normal development mode. Use os.getcwd() or __file__ as appropriate in your case...
-            resolved_path = os.path.abspath(os.path.join(os.getcwd(), path))
-
-        return resolved_path
-
-    # Function for resetting tower positions
-    def resetPos(self):
-        try:
-            with open('towerpos.json') as f:
-                def on_click(self,x,y,button,pressed):
-                    self.x = x
-                    self.y = y
-                    if pressed:
-                        return False
-
-                button_name = self.sender().text().lower().replace(' ', '_')
-                with open('towerpos.json', 'r+') as f:
-                    pos = json.load(f)
-                    pos[button_name] = self.x
-                    pos[button_name] = self.y
-                    f.seek(0)
-                    json.dump(pos)
-
-                with mouse.Listener(on_click=on_click) as listener:
-                    listener.join()
-        except FileNotFoundError:
-            error = BloonsUIError("No File Found", "Error! coordinate file not found! (Run one of the default farms first)")
-            error.show()
-
-
-class BloonsUIError(QMainWindow):
-    def __init__(self, title, errormessage):
-        super().__init__()
-        # Error Window setup junk
-        self.errorwindowUI = QApplication()
-        self.setWindowTitle(title)
-        self.setGeometry(550, 250, 300, 100)
-        self.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.errorwindow = QWidget()
-        self.errorlayout = QVBoxLayout()
-        self.errorhbox = QHBoxLayout()
-
-        # Font setup
-        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
-        self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
-        self.custom_font = QFont(self.font_name)
-
-        # Add error window label widget
-        self.errorlabel = QLabel(errormessage, parent=self)
-        self.custom_font.setPointSize(10.5)
-        self.errorlabel.setFont(self.custom_font)
-
-        # Add Widgets and set up layout of error window
-        self.errorhbox.addWidget(self.errorlabel)
-        self.errorlayout.addLayout(self.errorhbox)
-
-    # Finding file path for assets
-    def resolve_path(self, path):
-        if getattr(sys, "frozen", False):
-            # If the 'frozen' flag is set, we are in bundled-app mode!
-            resolved_path = os.path.abspath(os.path.join(sys._MEIPASS, path))
-        else:
-            # Normal development mode. Use os.getcwd() or __file__ as appropriate in your case...
-            resolved_path = os.path.abspath(os.path.join(os.getcwd(), path))
-
-        return resolved_path
