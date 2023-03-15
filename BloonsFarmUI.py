@@ -13,9 +13,11 @@ import pyautogui
 import threading
 import keyboard
 import json
+
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QFont, QAction, QIcon
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QMenuBar, \
-    QMainWindow, QMenu, QDialog
+    QMainWindow, QMenu
 from pynput import mouse
 
 import CoordinateHandler
@@ -25,16 +27,14 @@ import CoordinateHandler
 #TODO: add functionality to the secondary windows to edit tower positions
 
 
-class BloonsAutoFarm:
+class BloonsUIMain(QMainWindow):
     def __init__(self):
+        super().__init__()
         # Main Window UI setup junk
         self.BloonsUI = QApplication([])
-        self.mainwindow = QMainWindow()
-        self.mainwindow.setWindowTitle('Bloons Auto Farm')
-        self.mainwindow.setGeometry(550, 250, 800, 600)
-
+        self.setWindowTitle('Bloons Auto Farm')
+        self.setGeometry(550, 250, 800, 600)
         self.window = QWidget()
-
         self.layout = QVBoxLayout()
         self.mainhboxtop = QHBoxLayout()
         self.mainhboxbot = QHBoxLayout()
@@ -42,35 +42,6 @@ class BloonsAutoFarm:
         self.defhboxbot = QHBoxLayout()
         self.def2xhboxtop = QHBoxLayout()
         self.def2xhboxbot = QHBoxLayout()
-
-        # Secondary Window UI setup junk
-        self.editdef = QDialog()
-        self.editdef.setWindowTitle('Deflation')
-        self.editdef.setGeometry(550, 250, 400, 300)
-        self.editdef.setModal(True)
-
-
-        self.editdef2x = QDialog()
-        self.editdef2x.setWindowTitle('Deflation 2x Cash')
-        self.editdef2x.setGeometry(550, 250, 400, 300)
-        self.editdef2x.setModal(True)
-
-
-        self.deflayout = QHBoxLayout()
-        self.def2xlayout = QHBoxLayout()
-
-        self.defvbox = QVBoxLayout()
-        self.def2xvbox = QVBoxLayout()
-
-        # Error Window setup junk
-        self.error = QDialog()
-        self.error.setWindowTitle("Error")
-        self.error.setGeometry(550, 250, 300, 100)
-        self.error.setModal(True)
-
-        self.errorlayout = QVBoxLayout()
-        self.errorhbox = QHBoxLayout()
-
 
         # Font setup
         self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
@@ -95,22 +66,14 @@ class BloonsAutoFarm:
         self.deflation2xlabel.setFont(self.custom_font)
         self.deflation2xlabel.hide()
 
-        # Add sub window label widgets
-        self.subwinlab = QLabel("Select a tower to change it's position:")
-
-        # Add error window label widget
-        self.errorlabel = QLabel("Error! coordinate file not found! (Run one of the default farms first)", parent=self.error)
-        self.custom_font.setPointSize(10.5)
-        self.errorlabel.setFont(self.custom_font)
-
         # Add a menu bar
         self.menubar = QMenuBar()
         self.editmenu = QMenu("Edit", self.menubar)
 
-        self.deflation_action = QAction('Deflation', self.mainwindow)
+        self.deflation_action = QAction('Deflation', self)
         self.editmenu.addAction(self.deflation_action)
 
-        self.deflation2x_action = QAction('Deflation 2x Cash', self.mainwindow)
+        self.deflation2x_action = QAction('Deflation 2x Cash', self)
         self.editmenu.addAction(self.deflation2x_action)
 
         self.menubar.addMenu(self.editmenu)
@@ -138,76 +101,6 @@ class BloonsAutoFarm:
         self.quitbutton.setFixedSize(200, 100)
         self.quitbutton.clicked.connect(self.quit)
 
-        # Add button widgets to sub windows
-        self.snip = QPushButton("Reset Sniper Pos", parent=self.editdef2x)
-        self.snip.setFixedSize(200, 50)
-        self.custom_font.setPointSize(15)
-        self.snip.setFont(self.custom_font)
-        self.snip.clicked.connect(self.resetPos)
-
-        self.alch = QPushButton("Reset Alchemist Pos", parent=self.editdef2x)
-        self.alch.setFixedSize(200, 50)
-        self.custom_font.setPointSize(13)
-        self.alch.setFont(self.custom_font)
-        self.alch.clicked.connect(self.resetPos)
-
-        self.vil = QPushButton("Reset Village Pos", parent=self.editdef2x)
-        self.vil.setFixedSize(200, 50)
-        self.custom_font.setPointSize(15)
-        self.vil.setFont(self.custom_font)
-        self.vil.clicked.connect(self.resetPos)
-
-        self.nintop = QPushButton("Reset Top Ninja Pos", parent=self.editdef)
-        self.nintop.setFixedSize(200, 50)
-        self.custom_font.setPointSize(15)
-        self.nintop.setFont(self.custom_font)
-        self.nintop.clicked.connect(self.resetPos)
-
-        self.alchtop = QPushButton("Reset Top Alchemist Pos", parent=self.editdef)
-        self.alchtop.setFixedSize(200, 50)
-        self.custom_font.setPointSize(12)
-        self.alchtop.setFont(self.custom_font)
-        self.alchtop.clicked.connect(self.resetPos)
-
-        self.ninbottom = QPushButton("Reset Bottom Ninja Pos", parent=self.editdef)
-        self.ninbottom.setFixedSize(200, 50)
-        self.custom_font.setPointSize(12)
-        self.ninbottom.setFont(self.custom_font)
-        self.ninbottom.clicked.connect(self.resetPos)
-
-        self.alchbottom = QPushButton("Reset Bottom Alchemist Pos", parent=self.editdef)
-        self.alchbottom.setFixedSize(200, 50)
-        self.custom_font.setPointSize(10)
-        self.alchbottom.setFont(self.custom_font)
-        self.alchbottom.clicked.connect(self.resetPos)
-
-        # Add Widgets and set up layout of sub windows
-        self.defvbox.addWidget(self.nintop)
-        self.defvbox.addWidget(self.ninbottom)
-        self.defvbox.addWidget(self.alchtop)
-        self.defvbox.addWidget(self.alchbottom)
-
-        self.def2xvbox.addWidget(self.snip)
-        self.def2xvbox.addWidget(self.alch)
-        self.def2xvbox.addWidget(self.vil)
-
-        self.deflayout.addLayout(self.defvbox)
-        self.def2xlayout.addLayout(self.def2xvbox)
-
-        # Add Widgets and set up layout of error window
-        self.errorhbox.addWidget(self.errorlabel)
-        self.errorlayout.addLayout(self.errorhbox)
-
-        # Finalize and setup of sub windows
-        self.editdef.setLayout(self.deflayout)
-
-        self.editdef2x.setLayout(self.def2xlayout)
-
-
-        # Finalize UI setup of error window
-        self.error.setLayout(self.errorlayout)
-
-
         # Add Widgets and set up layout of main UI page
         self.mainhboxtop.addWidget(self.mainlabel)
         self.mainhboxbot.addWidget(self.defbutton)
@@ -227,9 +120,9 @@ class BloonsAutoFarm:
 
         # Finalize UI setup and open the window
         self.window.setLayout(self.layout)
-        self.mainwindow.setCentralWidget(self.window)
-        self.mainwindow.setMenuBar(self.menubar)
-        self.mainwindow.show()
+        self.setCentralWidget(self.window)
+        self.setMenuBar(self.menubar)
+        self.show()
         self.run()
 
         # Tower setup
@@ -249,11 +142,15 @@ class BloonsAutoFarm:
         self.alchbottomy = 0
 
         # Reset Coordinates
-        self.x = 0;
-        self.y = 0;
+        self.x = 0
+        self.y = 0
         
         # Thread setup
         self.running = False
+
+        # Make the json file
+
+        
 
 
     # Separate methods to run in the buttons
@@ -472,39 +369,16 @@ class BloonsAutoFarm:
             time.sleep(0.5)
             pyautogui.click(x_fact * 693, y_fact * 851)
 
-
-
-    def resetPos(self):
-        try:
-            with open('towerpos.json') as f:
-                def on_click(self,x,y,button,pressed):
-                    self.x = x
-                    self.y = y
-                    if pressed:
-                        return False
-
-                button_name = self.editdef.sender().text()
-                with open('towerpos.json', 'r+') as f:
-                    pos = json.load(f)
-                    pos[button_name] = self.x
-                    pos[button_name] = self.y
-                    f.seek(0)
-                    json.dump(pos)
-
-                with mouse.Listener(on_click=on_click) as listener:
-                    listener.join()
-        except FileNotFoundError:
-            self.error.show()
-
     # Define menu functionality
     def editdeflation(self):
-        self.editdef.show()
-
+        defsubwin = BloonsUISub("Deflation",["Top Ninja Pos", "Bottom Ninja Pos", "Top Alchemist Pos", "Bottom Alchemist Pos"])
+        defsubwin.show()
+        defsubwin.raise_()
 
     def editdeflation2x(self):
-        self.editdef2x.show()
-
-
+        def2xsubwin = BloonsUISub("Deflation 2x Cash", ["Sniper Pos", "Alchemist Pos", "Village Pos"])
+        def2xsubwin.show()
+        def2xsubwin.raise_()
 
     # Define button functionality for main window
     def deflationpress(self):
@@ -541,13 +415,13 @@ class BloonsAutoFarm:
     def coordinateHandler(self):
         with open('towerpos.json', 'r') as f:
             pos = json.load(f)
-        self.snipx, self.snipy = pos['snip']
-        self.alchx, self.alchy = pos['alch']
-        self.vilx, self.vily= pos['vil']
-        self.nintopx, self.nintopy = pos['nintop']
-        self.ninbottomx, self.ninbottomy = pos['ninbottom']
-        self.alchtopx, self.alchtopy = pos['alchtop']
-        self.alchbottomx, self.alchbottomy = pos['alchbottom']
+        self.snipx, self.snipy = pos['sniper_pos']
+        self.alchx, self.alchy = pos['alchemist_pos']
+        self.vilx, self.vily= pos['village_pos']
+        self.nintopx, self.nintopy = pos['top_ninja_pos']
+        self.ninbottomx, self.ninbottomy = pos['bottom_ninja_pos']
+        self.alchtopx, self.alchtopy = pos['top_alchemist_pos']
+        self.alchbottomx, self.alchbottomy = pos['bottom_alchemist_pos']
 
     # Finding file path for assets
     def resolve_path(self, path):
@@ -565,5 +439,118 @@ class BloonsAutoFarm:
         sys.exit(self.BloonsUI.exec())
 
 if __name__ == "__main__":
-    BloonsUI = BloonsAutoFarm()
+    BloonsUI = BloonsUIMain()
     BloonsUI.run()
+
+class BloonsUISub(QMainWindow):
+    def __init__(self, title, button_labels):
+        super().__init__()
+        # Secondary Window UI setup junk
+        self.subwindowUI = QApplication()
+        self.setWindowTitle(title)
+        self.setGeometry(550, 250, 400, 300)
+        self.setWindowModality(Qt.WindowModality.ApplicationModal)
+        self.sub = QWidget()
+        self.sublayout = QHBoxLayout()
+        self.subvbox = QVBoxLayout()
+
+        # Font setup
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
+        self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
+        self.custom_font = QFont(self.font_name)
+
+        # Add sub window label widgets
+        self.subwinlab = QLabel("Select a tower to change it's position:", parent=self)
+        self.custom_font.setPointSize(15)
+        self.subwinlab.setFont(self.custom_font)
+
+        # Add Widgets and set up layout of sub windows
+        self.sublayout.addLayout(self.subvbox)
+        self.subvbox.addWidget(self.subwinlab)
+
+        # Create sub window buttons and add them to layout
+        self.buttons = []
+        for labels, i in enumerate(button_labels):
+            self.buttons[i] = QPushButton(labels, parent=self)
+            self.buttons[i].setFixedSize(200, 50)
+            self.custom_font.setPointSize(15)
+            self.buttons[i].setFont(self.custom_font)
+            self.buttons[i].clicked.connect(self.resetPos)
+            self.subvbox.addWidget(self.buttons[i])
+
+        # Finalize and setup of sub windows
+        self.sub.setLayout(self.sublayout)
+        self.setCentralWidget(self.sub)
+
+    # Function for finding file path for assets
+    def resolve_path(self, path):
+        if getattr(sys, "frozen", False):
+            # If the 'frozen' flag is set, we are in bundled-app mode!
+            resolved_path = os.path.abspath(os.path.join(sys._MEIPASS, path))
+        else:
+            # Normal development mode. Use os.getcwd() or __file__ as appropriate in your case...
+            resolved_path = os.path.abspath(os.path.join(os.getcwd(), path))
+
+        return resolved_path
+
+    # Function for resetting tower positions
+    def resetPos(self):
+        try:
+            with open('towerpos.json') as f:
+                def on_click(self,x,y,button,pressed):
+                    self.x = x
+                    self.y = y
+                    if pressed:
+                        return False
+
+                button_name = self.sender().text().lower().replace(' ', '_')
+                with open('towerpos.json', 'r+') as f:
+                    pos = json.load(f)
+                    pos[button_name] = self.x
+                    pos[button_name] = self.y
+                    f.seek(0)
+                    json.dump(pos)
+
+                with mouse.Listener(on_click=on_click) as listener:
+                    listener.join()
+        except FileNotFoundError:
+            error = BloonsUIError("No File Found", "Error! coordinate file not found! (Run one of the default farms first)")
+            error.show()
+
+
+class BloonsUIError(QMainWindow):
+    def __init__(self, title, errormessage):
+        super().__init__()
+        # Error Window setup junk
+        self.errorwindowUI = QApplication()
+        self.setWindowTitle(title)
+        self.setGeometry(550, 250, 300, 100)
+        self.setWindowModality(Qt.WindowModality.ApplicationModal)
+        self.errorwindow = QWidget()
+        self.errorlayout = QVBoxLayout()
+        self.errorhbox = QHBoxLayout()
+
+        # Font setup
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
+        self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
+        self.custom_font = QFont(self.font_name)
+
+        # Add error window label widget
+        self.errorlabel = QLabel(errormessage, parent=self)
+        self.custom_font.setPointSize(10.5)
+        self.errorlabel.setFont(self.custom_font)
+
+        # Add Widgets and set up layout of error window
+        self.errorhbox.addWidget(self.errorlabel)
+        self.errorlayout.addLayout(self.errorhbox)
+
+    # Finding file path for assets
+    def resolve_path(self, path):
+        if getattr(sys, "frozen", False):
+            # If the 'frozen' flag is set, we are in bundled-app mode!
+            resolved_path = os.path.abspath(os.path.join(sys._MEIPASS, path))
+        else:
+            # Normal development mode. Use os.getcwd() or __file__ as appropriate in your case...
+            resolved_path = os.path.abspath(os.path.join(os.getcwd(), path))
+
+        return resolved_path
