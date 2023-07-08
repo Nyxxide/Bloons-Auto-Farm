@@ -26,16 +26,16 @@ import CoordinateHandler
 #TODO: rework json file construction
 #TODO: add functionality to the secondary windows to edit tower positions
 
-class BloonsUIError(QMainWindow):
-    def __init__(self, title, errormessage):
+class BloonsUIPopup(QMainWindow):
+    def __init__(self, title, popupmessage):
         super().__init__()
         # Error Window setup junk
         self.setWindowTitle(title)
         self.setGeometry(550, 250, 300, 100)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.errorwindow = QWidget()
-        self.errorlayout = QVBoxLayout()
-        self.errorhbox = QHBoxLayout()
+        self.popupwindow = QWidget()
+        self.popuplayout = QVBoxLayout()
+        self.popuphbox = QHBoxLayout()
 
         # Font setup
         self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
@@ -43,13 +43,19 @@ class BloonsUIError(QMainWindow):
         self.custom_font = QFont(self.font_name)
 
         # Add error window label widget
-        self.errorlabel = QLabel(errormessage, parent=self)
-        self.custom_font.setPointSize(10.5)
-        self.errorlabel.setFont(self.custom_font)
+        self.popuplabel = QLabel(popupmessage, parent=self)
+        self.custom_font.setPointSize(13)
+        self.popuplabel.setFont(self.custom_font)
 
         # Add Widgets and set up layout of error window
-        self.errorhbox.addWidget(self.errorlabel)
-        self.errorlayout.addLayout(self.errorhbox)
+        self.popuphbox.addWidget(self.popuplabel)
+        self.popuplayout.addLayout(self.popuphbox)
+
+        # Finalize error window setup
+        self.popupwindow.setLayout(self.popuplayout)
+        self.setCentralWidget(self.popupwindow)
+
+
 
     # Finding file path for assets
     def resolve_path(self, path):
@@ -70,6 +76,7 @@ class BloonsUISub(QMainWindow):
         self.setGeometry(550, 250, 400, 300)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.sub = QWidget()
+        self.outvbox = QVBoxLayout()
         self.sublayout = QHBoxLayout()
         self.subvbox = QVBoxLayout()
 
@@ -79,26 +86,36 @@ class BloonsUISub(QMainWindow):
         self.custom_font = QFont(self.font_name)
 
         # Add sub window label widgets
-        self.subwinlab = QLabel("Select a tower to change it's position:", parent=self)
+        self.subwinlab = QLabel("Select a option to change it's position:", parent=self)
         self.custom_font.setPointSize(15)
         self.subwinlab.setFont(self.custom_font)
 
+        self.subwinlab2 = QLabel("Click where you want the new mouse click position to be", parent=self)
+        self.custom_font.setPointSize(15)
+        self.subwinlab2.setFont(self.custom_font)
+        self.subwinlab2.hide()
+
         # Add Widgets and set up layout of sub windows
-        self.sublayout.addLayout(self.subvbox)
-        self.subvbox.addWidget(self.subwinlab)
+        self.outvbox.addWidget(self.subwinlab)
 
         # Create sub window buttons and add them to layout
         self.buttons = []
-        for labels, i in enumerate(button_labels):
-            self.buttons[i] = QPushButton(labels, parent=self)
-            self.buttons[i].setFixedSize(200, 50)
-            self.custom_font.setPointSize(15)
-            self.buttons[i].setFont(self.custom_font)
-            self.buttons[i].clicked.connect(self.resetPos)
-            self.subvbox.addWidget(self.buttons[i])
+        for labels in button_labels:
+            button = QPushButton(labels, parent=self)
+            button.setFixedSize(200, 50)
+            self.custom_font.setPointSize(13)
+            button.setFont(self.custom_font)
+            button.clicked.connect(self.resetPos)
+            self.subvbox.addWidget(button)
+            self.buttons.append(button)
 
         # Finalize and setup of sub windows
-        self.sub.setLayout(self.sublayout)
+        self.padding = QWidget()
+        self.sublayout.addWidget(self.padding)
+        self.sublayout.addLayout(self.subvbox)
+        self.sublayout.addWidget(self.padding)
+        self.outvbox.addLayout(self.sublayout)
+        self.sub.setLayout(self.outvbox)
         self.setCentralWidget(self.sub)
 
     # Function for finding file path for assets
@@ -116,25 +133,29 @@ class BloonsUISub(QMainWindow):
     def resetPos(self):
         try:
             with open('towerpos.json') as f:
-                def on_click(self,x,y,button,pressed):
+                def on_click(x,y,button,pressed):
                     self.x = x
                     self.y = y
                     if pressed:
                         return False
 
+                with mouse.Listener(on_click=on_click) as listener:
+                    listener.join()
+
+
                 button_name = self.sender().text().lower().replace(' ', '_')
                 with open('towerpos.json', 'r+') as f:
                     pos = json.load(f)
-                    pos[button_name] = self.x
-                    pos[button_name] = self.y
+                    pos[button_name] = self.x, self.y
                     f.seek(0)
-                    json.dump(pos)
-
-                with mouse.Listener(on_click=on_click) as listener:
-                    listener.join()
+                    f.truncate()
+                    json.dump(pos, f)
+                self.success = BloonsUIPopup("Success", "Position successfully changed!")
+                self.success.show()
         except FileNotFoundError:
-            error = BloonsUIError("No File Found", "Error! coordinate file not found! (Run one of the default farms first)")
-            error.show()
+            self.error = BloonsUIPopup("No File Found", "Error! coordinate file not found! (Run one of the default farms first)")
+            self.error.show()
+
 class BloonsUIMain(QMainWindow):
     def __init__(self):
         self.BloonsUI = QApplication([])
@@ -178,6 +199,9 @@ class BloonsUIMain(QMainWindow):
         self.menubar = QMenuBar()
         self.editmenu = QMenu("Edit", self.menubar)
 
+        self.menunav_action = QAction('Menu Navigation', self)
+        self.editmenu.addAction(self.menunav_action)
+
         self.deflation_action = QAction('Deflation', self)
         self.editmenu.addAction(self.deflation_action)
 
@@ -186,6 +210,7 @@ class BloonsUIMain(QMainWindow):
 
         self.menubar.addMenu(self.editmenu)
 
+        self.menunav_action.triggered.connect(self.editmenunav)
         self.deflation_action.triggered.connect(self.editdeflation)
         self.deflation2x_action.triggered.connect(self.editdeflation2x)
 
@@ -248,6 +273,24 @@ class BloonsUIMain(QMainWindow):
         self.alchtopy = 0
         self.alchbottomx = 0
         self.alchbottomy = 0
+        self.playx = 0
+        self.playy = 0
+        self.expertx = 0
+        self.experty = 0
+        self.infernalx = 0
+        self.infernaly = 0
+        self.easyx = 0
+        self.easyy = 0
+        self.defmodex = 0
+        self.defmodey = 0
+        self.closewinx = 0
+        self.closewiny = 0
+        self.closetowerx = 0
+        self.closetowery = 0
+        self.endgame1x = 0
+        self.endgame1y = 0
+        self.endgame2x = 0
+        self.endgame2y = 0
 
         # Reset Coordinates
         self.x = 0
@@ -256,18 +299,8 @@ class BloonsUIMain(QMainWindow):
         # Thread setup
         self.running = False
 
-        # Make the json file
-
-        
-
-
     # Separate methods to run in the buttons
     def deflation(self):
-        try:
-            with open("towerpos.json") as f:
-                pass
-        except FileNotFoundError:
-            CoordinateHandler.main()
         self.coordinateHandler()
         width, height = pyautogui.size()
         x_fact = width / 1920
@@ -277,31 +310,31 @@ class BloonsUIMain(QMainWindow):
             counter = 0
             while counter < 5:
                 if not self.running:
-                    print("We're not self.running anymore, exit!")
+                    print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still self.running, keep sleeping... {counter + 1}/5")
+                    print(f"We're still running, keep sleeping... {counter + 1}/5")
                     time.sleep(1)
                     counter += 1
-            pyautogui.click(x_fact * 837, y_fact * 933)
+            pyautogui.click(self.playx, self.playy)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 1332, y_fact * 967)
+            pyautogui.click(self.expertx, self.experty)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 958, y_fact * 575)
+            pyautogui.click(self.infernalx, self.infernaly)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 656, y_fact * 396)
+            pyautogui.click(self.easyx, self.easyy)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 1253, y_fact * 446)
+            pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
             while counter < 10:
                 if not self.running:
-                    print("We're not self.running anymore, exit!")
+                    print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still self.running, keep sleeping... {counter + 1}/10")
+                    print(f"We're still running, keep sleeping... {counter + 1}/10")
                     time.sleep(1)
                     counter += 1
-            pyautogui.click(x_fact * 954, y_fact * 750)
+            pyautogui.click(self.closewinx, self.closewiny)
             time.sleep(0.25)
             pyautogui.click(self.nintopx, self.nintopy)
             time.sleep(0.25)
@@ -362,27 +395,22 @@ class BloonsUIMain(QMainWindow):
             keyboard.press_and_release('space')
             time.sleep(0.25)
             keyboard.press_and_release('space')
-            pyautogui.click(x_fact * 693, y_fact * 851)
+            pyautogui.click(self.closetowerx, self.closetowery)
             counter = 0
             while counter < 330:
                 if not self.running:
-                    print("We're not self.running anymore, exit!")
+                    print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still self.running, keep sleeping... {counter + 1}/330")
+                    print(f"We're still running, keep sleeping... {counter + 1}/330")
                     time.sleep(1)
                     counter += 1
-            pyautogui.click(x_fact * 956, y_fact * 904)
+            pyautogui.click(self.endgame1x, self.endgame1y)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 693, y_fact * 851)
+            pyautogui.click(self.endgame2x, self.endgame2y)
             print("Done with the loop!")
 
     def deflation2x(self):
-        try:
-            with open("towerpos.json") as f:
-                pass
-        except FileNotFoundError:
-            CoordinateHandler.main()
         self.coordinateHandler()
         width, height = pyautogui.size()
         x_fact = width / 1920
@@ -392,31 +420,31 @@ class BloonsUIMain(QMainWindow):
             counter = 0
             while counter < 5:
                 if not self.running:
-                    print("We're not self.running anymore, exit!")
+                    print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still self.running, keep sleeping... {counter + 1}/5")
+                    print(f"We're still running, keep sleeping... {counter + 1}/5")
                     time.sleep(1)
                     counter += 1
-            pyautogui.click(x_fact * 837, y_fact * 933)
+            pyautogui.click(self.playx, self.playy)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 1332, y_fact * 967)
+            pyautogui.click(self.expertx, self.experty)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 958, y_fact * 575)
+            pyautogui.click(self.infernalx, self.infernaly)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 656, y_fact * 396)
+            pyautogui.click(self.easyx, self.easyy)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 1253, y_fact * 446)
+            pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
             while counter < 10:
                 if not self.running:
-                    print("We're not self.running anymore, exit!")
+                    print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still self.running, keep sleeping... {counter + 1}/10")
+                    print(f"We're still running, keep sleeping... {counter + 1}/10")
                     time.sleep(1)
                     counter += 1
-            pyautogui.click(x_fact * 954, y_fact * 750)
+            pyautogui.click(self.closewinx, self.closewiny)
             time.sleep(0.25)
             pyautogui.click(self.snipx, self.snipy)
             time.sleep(0.25)
@@ -463,30 +491,35 @@ class BloonsUIMain(QMainWindow):
             keyboard.press_and_release('space')
             time.sleep(0.25)
             keyboard.press_and_release('space')
-            pyautogui.click(x_fact * 693, y_fact * 851)
+            pyautogui.click(self.closetowerx, self.closetowery)
             counter = 0
             while counter < 303:
                 if not self.running:
-                    print("We're not self.running anymore, exit!")
+                    print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still self.running, keep sleeping... {counter + 1}/303")
+                    print(f"We're still running, keep sleeping... {counter + 1}/303")
                     time.sleep(1)
                     counter += 1
-            pyautogui.click(x_fact * 956, y_fact * 904)
+            pyautogui.click(self.endgame1x, self.endgame1y)
             time.sleep(0.5)
-            pyautogui.click(x_fact * 693, y_fact * 851)
+            pyautogui.click(self.endgame2x, self.endgame2y)
 
     # Define menu functionality
+    def editmenunav(self):
+        self.menusubwin = BloonsUISub("Menu Navigation",["Play Button Pos", "Expert Button Pos", "Infernal Map Pos", "Easy Button Pos", "Deflation Pos", "Close Menu Pos", "Close Tower Pos", "End Game1 Pos", "End Game2 Pos"])
+        self.menusubwin.show()
+        self.menusubwin.raise_()
+
     def editdeflation(self):
-        defsubwin = BloonsUISub("Deflation",["Top Ninja Pos", "Bottom Ninja Pos", "Top Alchemist Pos", "Bottom Alchemist Pos"])
-        defsubwin.show()
-        defsubwin.raise_()
+        self.defsubwin = BloonsUISub("Deflation",["Top Ninja Pos", "Bottom Ninja Pos", "Top Alchemist Pos", "Bottom Alchemist Pos"])
+        self.defsubwin.show()
+        self.defsubwin.raise_()
 
     def editdeflation2x(self):
-        def2xsubwin = BloonsUISub("Deflation 2x Cash", ["Sniper Pos", "Alchemist Pos", "Village Pos"])
-        def2xsubwin.show()
-        def2xsubwin.raise_()
+        self.def2xsubwin = BloonsUISub("Deflation 2x Cash", ["Sniper Pos", "Alchemist Pos", "Village Pos"])
+        self.def2xsubwin.show()
+        self.def2xsubwin.raise_()
 
     # Define button functionality for main window
     def deflationpress(self):
@@ -530,6 +563,17 @@ class BloonsUIMain(QMainWindow):
         self.ninbottomx, self.ninbottomy = pos['bottom_ninja_pos']
         self.alchtopx, self.alchtopy = pos['top_alchemist_pos']
         self.alchbottomx, self.alchbottomy = pos['bottom_alchemist_pos']
+        self.playx, self.playy = pos["play_button_pos"]
+        self.expertx, self.experty = pos["expert_button_pos"]
+        self.infernalx, self.infernaly = pos["infernal_map_pos"]
+        self.easyx, self.easyy = pos["easy_button_pos"]
+        self.defmodex, self.defmodey = pos["deflation_pos"]
+        self.closewinx, self.closewiny = pos["close_menu_pos"]
+        self.closetowerx, self.closetowery = pos["close_tower_pos"]
+        self.endgame1x, self.endgame1y = pos["end_game1_pos"]
+        self.endgame2x, self.endgame2y = pos["end_game2_pos"]
+        
+        
 
     # Finding file path for assets
     def resolve_path(self, path):
@@ -544,6 +588,11 @@ class BloonsUIMain(QMainWindow):
 
     # Run program
     def run(self):
+        try:
+            with open("towerpos.json") as f:
+                pass
+        except FileNotFoundError:
+            CoordinateHandler.main()
         sys.exit(self.BloonsUI.exec())
 
 if __name__ == "__main__":
