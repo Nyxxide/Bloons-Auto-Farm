@@ -1,22 +1,9 @@
 import sys
-import os
-
-abspath = os.getcwd()
-
-block_cipher = None
 
 a = Analysis(['src/BloonsFarmUI.py'],
-             pathex=[abspath], # just the directory not the file
-             binaries=[],
-             datas=[],
              hiddenimports=['keyboard', 'pyautogui', 'pyqt5'],
-             hookspath=[],
-             runtime_hooks=[],
-             excludes=[],
-             win_no_prefer_redirects=False,
-             win_private_assemblies=False,
-             cipher=block_cipher)
-pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+             hookspath=None)
+pyz = PYZ(a.pure)
 exe = EXE(pyz,
           a.scripts,
           # Static link the Visual C++ Redistributable DLLs if on Windows
@@ -25,7 +12,7 @@ exe = EXE(pyz,
           if sys.platform == 'win32' else a.binaries,
           a.zipfiles,
           a.datas + [('Resources/LuckiestGuy-Regular.ttf','src/Resources/LuckiestGuy-Regular.ttf', "DATA"),('Resources/btdfarmicon.ico', 'src/Resources/btdfarmicon.ico', "DATA")],
-          name=os.path.join('dist', 'BloonsFarmUI' + ('.exe' if sys.platform == 'win32' else '')),
+          name=os.path.join('dist', 'cryptully' + ('.exe' if sys.platform == 'win32' else '')),
           debug=False,
           strip=False,
           upx=True,
@@ -36,4 +23,4 @@ exe = EXE(pyz,
 if sys.platform == 'darwin':
    app = BUNDLE(exe,
                 name='BloonsFarmUI.app',
-                icon='src/Resources/btdfarmicon.ico')
+                icon=None)
