@@ -13,7 +13,7 @@ import pyautogui
 import threading
 import keyboard
 import json
-
+import cv2
 import pyscreeze
 from PySide6 import QtGui
 from PySide6.QtCore import Qt
