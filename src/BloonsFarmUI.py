@@ -13,7 +13,7 @@ import pyautogui
 import threading
 import keyboard
 import json
-
+import cv2
 import pyscreeze
 from PySide6 import QtGui
 from PySide6.QtCore import Qt
@@ -319,7 +319,7 @@ class BloonsUIMain(QMainWindow):
                     print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still running, keep sleeping... {counter + 1}/5")
+                    print(f"We're still running, keep sleeping... {counter + 1}")
                     imageToFind = pyscreeze.locateOnScreen('Resources/homemenu.png', confidence=0.9)
                     counter += 1
             pyautogui.click(self.playx, self.playy)
@@ -338,7 +338,7 @@ class BloonsUIMain(QMainWindow):
                     print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still running, keep sleeping... {counter + 1}/10")
+                    print(f"We're still running, keep sleeping... {counter + 1}")
                     imageToFind = pyscreeze.locateOnScreen('Resources/ingame.png', confidence=0.9)
                     counter += 1
             time.sleep(0.7)
@@ -413,7 +413,7 @@ class BloonsUIMain(QMainWindow):
                     print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still running, keep sleeping... {counter + 1}/330")
+                    print(f"We're still running, keep sleeping... {counter + 1}")
                     imageToFind = pyscreeze.locateOnScreen('Resources/endgame.png', confidence=0.9)
                     counter += 1
             pyautogui.click(self.endgame1x, self.endgame1y)
@@ -435,7 +435,7 @@ class BloonsUIMain(QMainWindow):
                     print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still running, keep sleeping... {counter + 1}/5")
+                    print(f"We're still running, keep sleeping... {counter + 1}")
                     imageToFind = pyscreeze.locateOnScreen('Resources/homemenu.png', confidence=0.9)
                     counter += 1
             pyautogui.click(self.playx, self.playy)
@@ -454,7 +454,7 @@ class BloonsUIMain(QMainWindow):
                     print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still running, keep sleeping... {counter + 1}/10")
+                    print(f"We're still running, keep sleeping... {counter + 1}")
                     imageToFind = pyscreeze.locateOnScreen('Resources/ingame.png', confidence=0.9)
                     counter += 1
             time.sleep(0.7)
@@ -515,7 +515,7 @@ class BloonsUIMain(QMainWindow):
                     print("We're not running anymore, exit!")
                     return
                 else:
-                    print(f"We're still running, keep sleeping... {counter + 1}/303")
+                    print(f"We're still running, keep sleeping... {counter + 1}")
                     imageToFind = pyscreeze.locateOnScreen('Resources/endgame.png', confidence=0.9)
                     counter += 1
             pyautogui.click(self.endgame1x, self.endgame1y)

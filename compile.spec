@@ -1,7 +1,7 @@
 import sys
 
 a = Analysis(['src/BloonsFarmUI.py'],
-             hiddenimports=['keyboard', 'pyautogui', 'pyqt5', 'pynput'],
+             hiddenimports=['keyboard', 'pyautogui', 'pyqt5', 'pynput', 'cv2', 'pyscreeze'],
              hookspath=None)
 pyz = PYZ(a.pure)
 exe = EXE(pyz,
