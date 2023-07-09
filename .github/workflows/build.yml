@@ -87,6 +87,8 @@ jobs:
 
       - name: Release
         run: |
-          hub release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUI#Mac_Bloons
+          # Rename the mac executable so it doesn't share a name with the linux executable
+          mv dist/BloonsFarmUI dist/BloonsFarmUi_macOS
+          hub release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -m ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -a dist/BloonsFarmUi_macOS
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
