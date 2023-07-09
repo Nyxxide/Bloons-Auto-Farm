@@ -14,6 +14,7 @@ import threading
 import keyboard
 import json
 
+import pyscreeze
 from PySide6 import QtGui
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QFont, QAction, QIcon
@@ -312,7 +313,8 @@ class BloonsUIMain(QMainWindow):
 
         while self.running:
             counter = 0
-            while counter < 5:
+            imageToFind = pyscreeze.locateOnScreen('Resources/homemenu.png', confidence=0.9)
+            while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
@@ -330,7 +332,8 @@ class BloonsUIMain(QMainWindow):
             time.sleep(0.5)
             pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
-            while counter < 10:
+            imageToFind = pyscreeze.locateOnScreen('Resources/ingame.png', confidence=0.9)
+            while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
@@ -338,8 +341,11 @@ class BloonsUIMain(QMainWindow):
                     print(f"We're still running, keep sleeping... {counter + 1}/10")
                     time.sleep(1)
                     counter += 1
-            pyautogui.click(self.closewinx, self.closewiny)
-            time.sleep(0.25)
+            time.sleep(0.7)
+            imageToFind = pyscreeze.locateOnScreen('Resources/tooltipcheck.png', confidence=0.9)
+            if(imageToFind is not None):
+                pyautogui.click(self.closewinx, self.closewiny)
+                time.sleep(0.25)
             pyautogui.click(self.nintopx, self.nintopy)
             time.sleep(0.25)
             keyboard.press_and_release('d')
@@ -401,7 +407,8 @@ class BloonsUIMain(QMainWindow):
             keyboard.press_and_release('space')
             pyautogui.click(self.closetowerx, self.closetowery)
             counter = 0
-            while counter < 330:
+            imageToFind = pyscreeze.locateOnScreen('Resources/endgame.png', confidence=0.9)
+            while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
@@ -422,7 +429,8 @@ class BloonsUIMain(QMainWindow):
 
         while self.running:
             counter = 0
-            while counter < 5:
+            imageToFind = pyscreeze.locateOnScreen('Resources/homemenu.png', confidence=0.9)
+            while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
@@ -440,7 +448,8 @@ class BloonsUIMain(QMainWindow):
             time.sleep(0.5)
             pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
-            while counter < 10:
+            imageToFind = pyscreeze.locateOnScreen('Resources/ingame.png', confidence=0.9)
+            while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
@@ -448,8 +457,11 @@ class BloonsUIMain(QMainWindow):
                     print(f"We're still running, keep sleeping... {counter + 1}/10")
                     time.sleep(1)
                     counter += 1
-            pyautogui.click(self.closewinx, self.closewiny)
-            time.sleep(0.25)
+            time.sleep(0.7)
+            imageToFind = pyscreeze.locateOnScreen('Resources/tooltipcheck.png', confidence=0.9)
+            if(imageToFind is not None):
+                pyautogui.click(self.closewinx, self.closewiny)
+                time.sleep(0.25)
             pyautogui.click(self.snipx, self.snipy)
             time.sleep(0.25)
             keyboard.press_and_release('z')
@@ -497,7 +509,8 @@ class BloonsUIMain(QMainWindow):
             keyboard.press_and_release('space')
             pyautogui.click(self.closetowerx, self.closetowery)
             counter = 0
-            while counter < 303:
+            imageToFind = pyscreeze.locateOnScreen('Resources/endgame.png', confidence=0.9)
+            while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
