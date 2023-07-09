@@ -23,4 +23,4 @@ exe = EXE(pyz,
 if sys.platform == 'darwin':
    app = BUNDLE(exe,
                 name='BloonsFarmUI.app',
-                icon=src/Resources/btdfarmicon.ico)
+                icon='src/Resources/btdfarmicon.ico')
