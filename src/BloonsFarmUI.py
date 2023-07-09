@@ -14,6 +14,7 @@ import threading
 import keyboard
 import json
 
+from PySide6 import QtGui
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFontDatabase, QFont, QAction, QIcon
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QMenuBar, \
@@ -31,6 +32,7 @@ class BloonsUIPopup(QMainWindow):
         super().__init__()
         # Error Window setup junk
         self.setWindowTitle(title)
+        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/btdfarmicon.ico')))
         self.setGeometry(550, 250, 300, 100)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.popupwindow = QWidget()
@@ -73,6 +75,7 @@ class BloonsUISub(QMainWindow):
         super().__init__()
         # Secondary Window UI setup junk
         self.setWindowTitle(title)
+        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/btdfarmicon.ico')))
         self.setGeometry(550, 250, 400, 300)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.sub = QWidget()
@@ -162,6 +165,7 @@ class BloonsUIMain(QMainWindow):
         super().__init__()
         # Main Window UI setup junk
         self.setWindowTitle('Bloons Auto Farm')
+        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/btdfarmicon.ico')))
         self.setGeometry(550, 250, 800, 600)
         self.window = QWidget()
         self.layout = QVBoxLayout()
