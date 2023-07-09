@@ -38,7 +38,7 @@ class BloonsUIPopup(QMainWindow):
         self.popuphbox = QHBoxLayout()
 
         # Font setup
-        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/LuckiestGuy-Regular.ttf'))
         self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
         self.custom_font = QFont(self.font_name)
 
@@ -81,7 +81,7 @@ class BloonsUISub(QMainWindow):
         self.subvbox = QVBoxLayout()
 
         # Font setup
-        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/LuckiestGuy-Regular.ttf'))
         self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
         self.custom_font = QFont(self.font_name)
 
@@ -173,7 +173,7 @@ class BloonsUIMain(QMainWindow):
         self.def2xhboxbot = QHBoxLayout()
 
         # Font setup
-        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('LuckiestGuy-Regular.ttf'))
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/LuckiestGuy-Regular.ttf'))
         self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
         self.custom_font = QFont(self.font_name)
 
