@@ -12,7 +12,7 @@ exe = EXE(pyz,
           if sys.platform == 'win32' else a.binaries,
           a.zipfiles,
           a.datas + [('Resources/LuckiestGuy-Regular.ttf','src/Resources/LuckiestGuy-Regular.ttf', "DATA"),('Resources/btdfarmicon.ico', 'src/Resources/btdfarmicon.ico', "DATA")],
-          name=os.path.join('dist', 'cryptully' + ('.exe' if sys.platform == 'win32' else '')),
+          name=os.path.join('dist', 'BloonsFarmUI' + ('.exe' if sys.platform == 'win32' else '')),
           debug=False,
           strip=False,
           upx=True,
@@ -23,4 +23,4 @@ exe = EXE(pyz,
 if sys.platform == 'darwin':
    app = BUNDLE(exe,
                 name='BloonsFarmUI.app',
-                icon=None)
+                icon=src/Resources/btdfarmicon.ico)
