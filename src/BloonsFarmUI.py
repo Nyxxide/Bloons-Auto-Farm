@@ -313,14 +313,14 @@ class BloonsUIMain(QMainWindow):
 
         while self.running:
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen('Resources/homemenu.png', confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/homemenu.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen('Resources/homemenu.png', confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/homemenu.png')), confidence=0.9)
                     counter += 1
             pyautogui.click(self.playx, self.playy)
             time.sleep(0.5)
@@ -332,17 +332,20 @@ class BloonsUIMain(QMainWindow):
             time.sleep(0.5)
             pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen('Resources/ingame.png', confidence=0.9)
+            #imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/existinggame.png')), confidence=0.9)
+            #if(imageToFind is not None):
+                #pyautogui.click(1,1)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen('Resources/ingame.png', confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
                     counter += 1
             time.sleep(0.7)
-            imageToFind = pyscreeze.locateOnScreen('Resources/tooltipcheck.png', confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/tooltipcheck.png')), confidence=0.9)
             if(imageToFind is not None):
                 pyautogui.click(self.closewinx, self.closewiny)
                 time.sleep(0.25)
@@ -407,14 +410,14 @@ class BloonsUIMain(QMainWindow):
             keyboard.press_and_release('space')
             pyautogui.click(self.closetowerx, self.closetowery)
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen('Resources/endgame.png', confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/endgame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen('Resources/endgame.png', confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/endgame.png')), confidence=0.9)
                     counter += 1
             pyautogui.click(self.endgame1x, self.endgame1y)
             time.sleep(0.5)
@@ -429,14 +432,14 @@ class BloonsUIMain(QMainWindow):
 
         while self.running:
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen('Resources/homemenu.png', confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/homemenu.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen('Resources/homemenu.png', confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/homemenu.png')), confidence=0.9)
                     counter += 1
             pyautogui.click(self.playx, self.playy)
             time.sleep(0.5)
@@ -448,17 +451,17 @@ class BloonsUIMain(QMainWindow):
             time.sleep(0.5)
             pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen('Resources/ingame.png', confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen('Resources/ingame.png', confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
                     counter += 1
             time.sleep(0.7)
-            imageToFind = pyscreeze.locateOnScreen('Resources/tooltipcheck.png', confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/tooltipcheck.png')), confidence=0.9)
             if(imageToFind is not None):
                 pyautogui.click(self.closewinx, self.closewiny)
                 time.sleep(0.25)
@@ -509,14 +512,14 @@ class BloonsUIMain(QMainWindow):
             keyboard.press_and_release('space')
             pyautogui.click(self.closetowerx, self.closetowery)
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen('Resources/endgame.png', confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/endgame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen('Resources/endgame.png', confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/endgame.png')), confidence=0.9)
                     counter += 1
             pyautogui.click(self.endgame1x, self.endgame1y)
             time.sleep(0.5)
