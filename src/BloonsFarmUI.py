@@ -334,6 +334,7 @@ class BloonsUIMain(QMainWindow):
             time.sleep(0.5)
             pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
+            time.sleep(0.5)
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/existinggame.png')), confidence=0.9)
             if(imageToFind is not None):
                 pyautogui.click(self.existinggamex,self.existinggamey)
@@ -453,6 +454,7 @@ class BloonsUIMain(QMainWindow):
             time.sleep(0.5)
             pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
+            time.sleep(0.5)
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/existinggame.png')), confidence=0.9)
             if (imageToFind is not None):
                 pyautogui.click(self.existinggamex, self.existinggamey)
