@@ -29,8 +29,9 @@ def main():
         "infernal_map_pos": ((x_fact * 958), (y_fact * 575)),
         "easy_button_pos": ((x_fact * 656), (y_fact * 396)),
         "deflation_pos": ((x_fact * 1253), (y_fact * 446)),
-        "close_menu_pos": ((x_fact * 954), (y_fact * 750)),
+        "close_tooltip_pos": ((x_fact * 954), (y_fact * 750)),
         "close_tower_pos": ((x_fact * 693), (y_fact * 851)),
+        "existing_game_pos": ((x_fact * 1136), (y_fact * 730)),
 
         "end_game1_pos": ((x_fact * 957), (y_fact * 904)),
         "end_game2_pos": ((x_fact * 693), (y_fact * 851)),

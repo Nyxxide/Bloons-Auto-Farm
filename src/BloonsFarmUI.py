@@ -292,6 +292,8 @@ class BloonsUIMain(QMainWindow):
         self.closewiny = 0
         self.closetowerx = 0
         self.closetowery = 0
+        self.existinggamex = 0
+        self.existinggamey = 0
         self.endgame1x = 0
         self.endgame1y = 0
         self.endgame2x = 0
@@ -332,9 +334,9 @@ class BloonsUIMain(QMainWindow):
             time.sleep(0.5)
             pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
-            #imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/existinggame.png')), confidence=0.9)
-            #if(imageToFind is not None):
-                #pyautogui.click(1,1)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/existinggame.png')), confidence=0.9)
+            if(imageToFind is not None):
+                pyautogui.click(self.existinggamex,self.existinggamey)
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
@@ -451,6 +453,9 @@ class BloonsUIMain(QMainWindow):
             time.sleep(0.5)
             pyautogui.click(self.defmodex, self.defmodey)
             counter = 0
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/existinggame.png')), confidence=0.9)
+            if (imageToFind is not None):
+                pyautogui.click(self.existinggamex, self.existinggamey)
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
@@ -527,7 +532,7 @@ class BloonsUIMain(QMainWindow):
 
     # Define menu functionality
     def editmenunav(self):
-        self.menusubwin = BloonsUISub("Menu Navigation",["Play Button Pos", "Expert Button Pos", "Infernal Map Pos", "Easy Button Pos", "Deflation Pos", "Close Menu Pos", "Close Tower Pos", "End Game1 Pos", "End Game2 Pos"])
+        self.menusubwin = BloonsUISub("Menu Navigation",["Play Button Pos", "Expert Button Pos", "Infernal Map Pos", "Easy Button Pos", "Deflation Pos", "Existing Game Pos", "Close Tooltip Pos", "Close Tower Pos", "End Game1 Pos", "End Game2 Pos"])
         self.menusubwin.show()
         self.menusubwin.raise_()
 
@@ -588,8 +593,9 @@ class BloonsUIMain(QMainWindow):
         self.infernalx, self.infernaly = pos["infernal_map_pos"]
         self.easyx, self.easyy = pos["easy_button_pos"]
         self.defmodex, self.defmodey = pos["deflation_pos"]
-        self.closewinx, self.closewiny = pos["close_menu_pos"]
+        self.closewinx, self.closewiny = pos["close_tooltip_pos"]
         self.closetowerx, self.closetowery = pos["close_tower_pos"]
+        self.existinggamex, self.existinggamey = pos["existing_game_pos"]
         self.endgame1x, self.endgame1y = pos["end_game1_pos"]
         self.endgame2x, self.endgame2y = pos["end_game2_pos"]
         
