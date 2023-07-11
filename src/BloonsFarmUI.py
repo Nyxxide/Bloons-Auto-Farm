@@ -422,7 +422,7 @@ class BloonsUIMain(QMainWindow):
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame2.png')), confidence=0.9)
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
-            time.sleep(3.0)
+            time.sleep(3)
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/collectionevent.png')), confidence=0.9)
             if (imageToFind is not None):
                 x, y, _, _ = imageToFind
@@ -441,6 +441,7 @@ class BloonsUIMain(QMainWindow):
                     time.sleep(0.8)
                     pyautogui.click(x, y)
                     time.sleep(0.8)
+                time.sleep(0.8)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
@@ -592,6 +593,7 @@ class BloonsUIMain(QMainWindow):
                     time.sleep(0.8)
                     pyautogui.click(x, y)
                     time.sleep(0.8)
+                time.sleep(0.8)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
