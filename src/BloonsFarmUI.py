@@ -441,11 +441,11 @@ class BloonsUIMain(QMainWindow):
                     time.sleep(0.8)
                     pyautogui.click(x, y)
                     time.sleep(0.8)
-                time.sleep(0.8)
+                time.sleep(1.8)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
-                time.sleep(0.8)
+                time.sleep(1.5)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/backhome.png')), confidence=0.9)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
@@ -593,11 +593,11 @@ class BloonsUIMain(QMainWindow):
                     time.sleep(0.8)
                     pyautogui.click(x, y)
                     time.sleep(0.8)
-                time.sleep(0.8)
+                time.sleep(1.8)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
-                time.sleep(0.8)
+                time.sleep(1.5)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/backhome.png')), confidence=0.9)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
