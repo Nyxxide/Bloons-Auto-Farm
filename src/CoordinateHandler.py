@@ -24,17 +24,6 @@ def main():
         "bottom_alchemist_pos": ((towerx_fact * 834),(towery_fact * 764)),
         "bottom_ninja_pos": ((towerx_fact * 835),(towery_fact * 696)),
 
-        "play_button_pos": ((x_fact * 837),(y_fact * 933)),
-        "expert_button_pos": ((x_fact * 1332), (y_fact * 967)),
-        "infernal_map_pos": ((x_fact * 958), (y_fact * 575)),
-        "easy_button_pos": ((x_fact * 656), (y_fact * 396)),
-        "deflation_pos": ((x_fact * 1253), (y_fact * 446)),
-        "close_tooltip_pos": ((x_fact * 954), (y_fact * 750)),
-        "close_tower_pos": ((x_fact * 693), (y_fact * 851)),
-        "existing_game_pos": ((x_fact * 1136), (y_fact * 730)),
-
-        "end_game1_pos": ((x_fact * 957), (y_fact * 904)),
-        "end_game2_pos": ((x_fact * 693), (y_fact * 851)),
     }
 
     with open('towerpos.json', 'w') as f:

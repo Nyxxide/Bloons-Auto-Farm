@@ -33,7 +33,7 @@ class BloonsUIPopup(QMainWindow):
         super().__init__()
         # Error Window setup junk
         self.setWindowTitle(title)
-        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/btdfarmicon.ico')))
+        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/UI/farmicon.ico')))
         self.setGeometry(550, 250, 300, 100)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.popupwindow = QWidget()
@@ -41,7 +41,7 @@ class BloonsUIPopup(QMainWindow):
         self.popuphbox = QHBoxLayout()
 
         # Font setup
-        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/LuckiestGuy-Regular.ttf'))
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/UI/LuckiestGuy-Regular.ttf'))
         self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
         self.custom_font = QFont(self.font_name)
 
@@ -76,7 +76,7 @@ class BloonsUISub(QMainWindow):
         super().__init__()
         # Secondary Window UI setup junk
         self.setWindowTitle(title)
-        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/btdfarmicon.ico')))
+        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/UI/btdfarmicon.ico')))
         self.setGeometry(550, 250, 400, 300)
         self.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.sub = QWidget()
@@ -85,7 +85,7 @@ class BloonsUISub(QMainWindow):
         self.subvbox = QVBoxLayout()
 
         # Font setup
-        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/LuckiestGuy-Regular.ttf'))
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/UI/LuckiestGuy-Regular.ttf'))
         self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
         self.custom_font = QFont(self.font_name)
 
@@ -166,7 +166,7 @@ class BloonsUIMain(QMainWindow):
         super().__init__()
         # Main Window UI setup junk
         self.setWindowTitle('Bloons Auto Farm')
-        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/btdfarmicon.ico')))
+        self.setWindowIcon(QtGui.QIcon(self.resolve_path('Resources/UI/btdfarmicon.ico')))
         self.setGeometry(550, 250, 800, 600)
         self.window = QWidget()
         self.layout = QVBoxLayout()
@@ -178,7 +178,7 @@ class BloonsUIMain(QMainWindow):
         self.def2xhboxbot = QHBoxLayout()
 
         # Font setup
-        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/LuckiestGuy-Regular.ttf'))
+        self.font_id = QFontDatabase.addApplicationFont(self.resolve_path('Resources/UI/LuckiestGuy-Regular.ttf'))
         self.font_name = QFontDatabase.applicationFontFamilies(self.font_id)[0]
         self.custom_font = QFont(self.font_name)
 
@@ -204,9 +204,6 @@ class BloonsUIMain(QMainWindow):
         self.menubar = QMenuBar()
         self.editmenu = QMenu("Edit", self.menubar)
 
-        self.menunav_action = QAction('Menu Navigation', self)
-        self.editmenu.addAction(self.menunav_action)
-
         self.deflation_action = QAction('Deflation', self)
         self.editmenu.addAction(self.deflation_action)
 
@@ -215,7 +212,6 @@ class BloonsUIMain(QMainWindow):
 
         self.menubar.addMenu(self.editmenu)
 
-        self.menunav_action.triggered.connect(self.editmenunav)
         self.deflation_action.triggered.connect(self.editdeflation)
         self.deflation2x_action.triggered.connect(self.editdeflation2x)
 
@@ -278,26 +274,7 @@ class BloonsUIMain(QMainWindow):
         self.alchtopy = 0
         self.alchbottomx = 0
         self.alchbottomy = 0
-        self.playx = 0
-        self.playy = 0
-        self.expertx = 0
-        self.experty = 0
-        self.infernalx = 0
-        self.infernaly = 0
-        self.easyx = 0
-        self.easyy = 0
-        self.defmodex = 0
-        self.defmodey = 0
-        self.closewinx = 0
-        self.closewiny = 0
-        self.closetowerx = 0
-        self.closetowery = 0
-        self.existinggamex = 0
-        self.existinggamey = 0
-        self.endgame1x = 0
-        self.endgame1y = 0
-        self.endgame2x = 0
-        self.endgame2y = 0
+
 
         # Reset Coordinates
         self.x = 0
@@ -315,42 +292,59 @@ class BloonsUIMain(QMainWindow):
 
         while self.running:
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/homemenu.png')), confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/homemenu.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/homemenu.png')), confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/homemenu.png')),
+                                                           confidence=0.9)
                     counter += 1
-            pyautogui.click(self.playx, self.playy)
-            time.sleep(0.5)
-            pyautogui.click(self.expertx, self.experty)
-            time.sleep(0.5)
-            pyautogui.click(self.infernalx, self.infernaly)
-            time.sleep(0.5)
-            pyautogui.click(self.easyx, self.easyy)
-            time.sleep(0.5)
-            pyautogui.click(self.defmodex, self.defmodey)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.7)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.9)
+            if (imageToFind is None):
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MapDifficulty/expert.png')), confidence=0.9)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                time.sleep(0.7)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.9)
+                x, y, _, _ = imageToFind
+            else:
+                x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.6)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Difficulty/easy.png')), confidence=0.9)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.6)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Mode/deflation.png')), confidence=0.9)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
             counter = 0
-            time.sleep(0.7)
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/existinggame.png')), confidence=0.9)
-            if(imageToFind is not None):
-                pyautogui.click(self.existinggamex,self.existinggamey)
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
+            time.sleep(0.6)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/existinggame.png')), confidence=0.9)
+            if (imageToFind is not None):
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/existingok.png')), confidence=0.9)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/ingame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/ingame.png')), confidence=0.9)
                     counter += 1
             time.sleep(0.7)
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/tooltipcheck.png')), confidence=0.9)
-            if(imageToFind is not None):
-                pyautogui.click(self.closewinx, self.closewiny)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/tooltipcheck.png')), confidence=0.9)
+            if (imageToFind is not None):
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
                 time.sleep(0.25)
             pyautogui.click(self.nintopx, self.nintopy)
             time.sleep(0.25)
@@ -411,21 +405,50 @@ class BloonsUIMain(QMainWindow):
             keyboard.press_and_release('space')
             time.sleep(0.25)
             keyboard.press_and_release('space')
-            pyautogui.click(self.closetowerx, self.closetowery)
+            keyboard.press_and_release('esc')
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/endgame.png')), confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/endgame.png')), confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame.png')), confidence=0.9)
                     counter += 1
-            pyautogui.click(self.endgame1x, self.endgame1y)
-            time.sleep(0.5)
-            pyautogui.click(self.endgame2x, self.endgame2y)
-            print("Done with the loop!")
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.6)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame2.png')), confidence=0.9)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.7)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/collectionevent.png')), confidence=0.9)
+            if (imageToFind is not None):
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                time.sleep(0.6)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                time.sleep(0.25)
+                pyautogui.click(x, y)
+                time.sleep(0.6)
+                while imageToFind is not None:
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
+                    x, y, _, _ = imageToFind
+                    pyautogui.click(x, y)
+                    time.sleep(0.25)
+                    pyautogui.click(x, y)
+                    time.sleep(0.6)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                time.sleep(0.6)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/backhome.png')), confidence=0.9)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                print("Done with the loop!")
 
     def deflation2x(self):
         self.coordinateHandler()
@@ -435,42 +458,58 @@ class BloonsUIMain(QMainWindow):
 
         while self.running:
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/homemenu.png')), confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/homemenu.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/homemenu.png')), confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/homemenu.png')), confidence=0.9)
                     counter += 1
-            pyautogui.click(self.playx, self.playy)
-            time.sleep(0.5)
-            pyautogui.click(self.expertx, self.experty)
-            time.sleep(0.5)
-            pyautogui.click(self.infernalx, self.infernaly)
-            time.sleep(0.5)
-            pyautogui.click(self.easyx, self.easyy)
-            time.sleep(0.5)
-            pyautogui.click(self.defmodex, self.defmodey)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.7)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.9)
+            if (imageToFind is None):
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MapDifficulty/expert.png')), confidence=0.9)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                time.sleep(0.7)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.9)
+                x, y, _, _ = imageToFind
+            else:
+                x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.6)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Difficulty/easy.png')), confidence=0.9)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.6)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Mode/deflation.png')), confidence=0.9)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
             counter = 0
-            time.sleep(0.7)
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/existinggame.png')), confidence=0.9)
+            time.sleep(0.6)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/existinggame.png')), confidence=0.9)
             if (imageToFind is not None):
-                pyautogui.click(self.existinggamex, self.existinggamey)
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/existingok.png')), confidence=0.9)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/ingame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/ingame.png')), confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/ingame.png')), confidence=0.9)
                     counter += 1
             time.sleep(0.7)
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/tooltipcheck.png')), confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/tooltipcheck.png')), confidence=0.9)
             if(imageToFind is not None):
-                pyautogui.click(self.closewinx, self.closewiny)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
                 time.sleep(0.25)
             pyautogui.click(self.snipx, self.snipy)
             time.sleep(0.25)
@@ -517,26 +556,51 @@ class BloonsUIMain(QMainWindow):
             keyboard.press_and_release('space')
             time.sleep(0.25)
             keyboard.press_and_release('space')
-            pyautogui.click(self.closetowerx, self.closetowery)
+            keyboard.press_and_release('esc')
             counter = 0
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/endgame.png')), confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame.png')), confidence=0.9)
             while imageToFind is None:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
-                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/endgame.png')), confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame.png')), confidence=0.9)
                     counter += 1
-            pyautogui.click(self.endgame1x, self.endgame1y)
-            time.sleep(0.5)
-            pyautogui.click(self.endgame2x, self.endgame2y)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.6)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame2.png')), confidence=0.9)
+            x, y, _, _ = imageToFind
+            pyautogui.click(x, y)
+            time.sleep(0.7)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/collectionevent.png')), confidence=0.9)
+            if(imageToFind is not None):
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                time.sleep(0.6)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                time.sleep(0.25)
+                pyautogui.click(x, y)
+                time.sleep(0.6)
+                while imageToFind is not None:
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
+                    x, y, _, _ = imageToFind
+                    pyautogui.click(x, y)
+                    time.sleep(0.25)
+                    pyautogui.click(x, y)
+                    time.sleep(0.6)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                time.sleep(0.6)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/backhome.png')), confidence=0.9)
+                x, y, _, _ = imageToFind
+                pyautogui.click(x, y)
+                print("Done with the loop!")
 
-    # Define menu functionality
-    def editmenunav(self):
-        self.menusubwin = BloonsUISub("Menu Navigation",["Play Button Pos", "Expert Button Pos", "Infernal Map Pos", "Easy Button Pos", "Deflation Pos", "Existing Game Pos", "Close Tooltip Pos", "Close Tower Pos", "End Game1 Pos", "End Game2 Pos"])
-        self.menusubwin.show()
-        self.menusubwin.raise_()
 
     def editdeflation(self):
         self.defsubwin = BloonsUISub("Deflation",["Top Ninja Pos", "Bottom Ninja Pos", "Top Alchemist Pos", "Bottom Alchemist Pos"])
@@ -590,16 +654,6 @@ class BloonsUIMain(QMainWindow):
         self.ninbottomx, self.ninbottomy = pos['bottom_ninja_pos']
         self.alchtopx, self.alchtopy = pos['top_alchemist_pos']
         self.alchbottomx, self.alchbottomy = pos['bottom_alchemist_pos']
-        self.playx, self.playy = pos["play_button_pos"]
-        self.expertx, self.experty = pos["expert_button_pos"]
-        self.infernalx, self.infernaly = pos["infernal_map_pos"]
-        self.easyx, self.easyy = pos["easy_button_pos"]
-        self.defmodex, self.defmodey = pos["deflation_pos"]
-        self.closewinx, self.closewiny = pos["close_tooltip_pos"]
-        self.closetowerx, self.closetowery = pos["close_tower_pos"]
-        self.existinggamex, self.existinggamey = pos["existing_game_pos"]
-        self.endgame1x, self.endgame1y = pos["end_game1_pos"]
-        self.endgame2x, self.endgame2y = pos["end_game2_pos"]
         
         
 
