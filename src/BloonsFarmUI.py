@@ -422,7 +422,7 @@ class BloonsUIMain(QMainWindow):
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame2.png')), confidence=0.9)
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
-            time.sleep(0.7)
+            time.sleep(1.0)
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/collectionevent.png')), confidence=0.9)
             if (imageToFind is not None):
                 x, y, _, _ = imageToFind
@@ -431,14 +431,14 @@ class BloonsUIMain(QMainWindow):
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
-                time.sleep(0.25)
+                time.sleep(0.6)
                 pyautogui.click(x, y)
                 time.sleep(0.6)
                 while imageToFind is not None:
                     imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
                     x, y, _, _ = imageToFind
                     pyautogui.click(x, y)
-                    time.sleep(0.25)
+                    time.sleep(0.6)
                     pyautogui.click(x, y)
                     time.sleep(0.6)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
@@ -573,7 +573,7 @@ class BloonsUIMain(QMainWindow):
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame2.png')), confidence=0.9)
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
-            time.sleep(0.7)
+            time.sleep(1.0)
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/collectionevent.png')), confidence=0.9)
             if(imageToFind is not None):
                 x, y, _, _ = imageToFind
@@ -582,14 +582,14 @@ class BloonsUIMain(QMainWindow):
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
-                time.sleep(0.25)
+                time.sleep(0.6)
                 pyautogui.click(x, y)
                 time.sleep(0.6)
                 while imageToFind is not None:
                     imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
                     x, y, _, _ = imageToFind
                     pyautogui.click(x, y)
-                    time.sleep(0.25)
+                    time.sleep(0.6)
                     pyautogui.click(x, y)
                     time.sleep(0.6)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
