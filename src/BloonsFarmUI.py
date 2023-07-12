@@ -415,7 +415,10 @@ class BloonsUIMain(QMainWindow):
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
                     imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame.png')), confidence=0.9)
+                    levelup = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/levelup.png')), confidence=0.9)
                     counter += 1
+                    if levelup is not None:
+                        pyautogui.click(x, y)
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
             time.sleep(0.6)
@@ -441,7 +444,7 @@ class BloonsUIMain(QMainWindow):
                     time.sleep(0.8)
                     pyautogui.click(x, y)
                     time.sleep(0.8)
-                time.sleep(1.8)
+                time.sleep(3.2)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
@@ -567,7 +570,10 @@ class BloonsUIMain(QMainWindow):
                 else:
                     print(f"We're still running, keep sleeping... {counter + 1}")
                     imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endgame.png')), confidence=0.9)
+                    levelup = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/levelup.png')), confidence=0.9)
                     counter += 1
+                    if levelup is not None:
+                        pyautogui.click(x, y)
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
             time.sleep(0.6)
@@ -593,7 +599,7 @@ class BloonsUIMain(QMainWindow):
                     time.sleep(0.8)
                     pyautogui.click(x, y)
                     time.sleep(0.8)
-                time.sleep(1.8)
+                time.sleep(3.2)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
