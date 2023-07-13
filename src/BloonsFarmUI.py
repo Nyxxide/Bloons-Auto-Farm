@@ -305,13 +305,13 @@ class BloonsUIMain(QMainWindow):
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
             time.sleep(0.7)
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.7)
             if (imageToFind is None):
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MapDifficulty/expert.png')), confidence=0.9)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
                 time.sleep(0.7)
-                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.9)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
             else:
                 x, y, _, _ = imageToFind
@@ -480,13 +480,13 @@ class BloonsUIMain(QMainWindow):
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
             time.sleep(0.7)
-            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.9)
+            imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.7)
             if (imageToFind is None):
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MapDifficulty/expert.png')), confidence=0.9)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
                 time.sleep(0.7)
-                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.9)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/Maps/infernal.png')), confidence=0.7)
                 x, y, _, _ = imageToFind
             else:
                 x, y, _, _ = imageToFind
