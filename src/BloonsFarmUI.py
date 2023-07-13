@@ -419,6 +419,7 @@ class BloonsUIMain(QMainWindow):
                     counter += 1
                     if levelup is not None:
                         pyautogui.click(x, y)
+                        pyautogui.click(x, y)
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
             time.sleep(0.6)
@@ -437,19 +438,24 @@ class BloonsUIMain(QMainWindow):
                 time.sleep(0.8)
                 pyautogui.click(x, y)
                 time.sleep(0.8)
-                while imageToFind is not None:
-                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
+                while True:
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')),
+                                                           confidence=0.7)
+                    if (imageToFind is None):
+                        break
                     x, y, _, _ = imageToFind
                     pyautogui.click(x, y)
                     time.sleep(0.8)
                     pyautogui.click(x, y)
                     time.sleep(0.8)
-                time.sleep(3.2)
-                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.9)
+                while imageToFind is None:
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.9)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
-                time.sleep(1.5)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/backhome.png')), confidence=0.9)
+                while imageToFind is None:
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/backhome.png')), confidence=0.9)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
                 print("Done with the loop!")
@@ -574,6 +580,7 @@ class BloonsUIMain(QMainWindow):
                     counter += 1
                     if levelup is not None:
                         pyautogui.click(x, y)
+                        pyautogui.click(x, y)
             x, y, _, _ = imageToFind
             pyautogui.click(x, y)
             time.sleep(0.6)
@@ -592,19 +599,23 @@ class BloonsUIMain(QMainWindow):
                 time.sleep(0.8)
                 pyautogui.click(x, y)
                 time.sleep(0.8)
-                while imageToFind is not None:
+                while True:
                     imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/instamonkey.png')), confidence=0.7)
+                    if(imageToFind is None):
+                        break
                     x, y, _, _ = imageToFind
                     pyautogui.click(x, y)
                     time.sleep(0.8)
                     pyautogui.click(x, y)
                     time.sleep(0.8)
-                time.sleep(3.2)
-                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.7)
+                imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.9)
+                while imageToFind is None:
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/endcollection.png')), confidence=0.9)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
-                time.sleep(1.5)
                 imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/backhome.png')), confidence=0.9)
+                while imageToFind is None:
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/backhome.png')), confidence=0.9)
                 x, y, _, _ = imageToFind
                 pyautogui.click(x, y)
                 print("Done with the loop!")
