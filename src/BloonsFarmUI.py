@@ -477,7 +477,7 @@ class BloonsUIMain(QMainWindow):
             pyautogui.click(x, y)
             clock = 0
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/collectionevent.png')), confidence=0.9)
-            while imageToFind is None and clock is not 10:
+            while imageToFind is None and clock is not 20:
                 if not self.running:
                     print("We're not running anymore, exit!")
                     return
