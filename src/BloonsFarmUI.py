@@ -172,8 +172,8 @@ class BloonsUIMain(QMainWindow):
                                   towerData('f', 1551, 544, 4, 2, 0),
                                   towerData('k', 1581, 622, 2, 3, 0)]
 
-        self.deflationMenuNav = menuNavData("expert", "inferno", "easy", "deflation")
-        self.deflation2xMenuNav = menuNavData("expert", "inferno", "easy", "deflation")
+        self.deflationMenuNav = menuNavData("expert", "infernal", "easy", "deflation")
+        self.deflation2xMenuNav = menuNavData("expert", "infernal", "easy", "deflation")
 
         # Gen the Pre-made .json Files
         if not os.path.exists('Tower Positions'):
@@ -290,7 +290,7 @@ class BloonsUIMain(QMainWindow):
 
     # Function used in the loop to handle menu navigation
     def menuNav(self, fileName):
-        with open(self.resolve_path('Tower Positions/' + fileName + '.json')) as f:
+        with open(('Tower Positions/' + fileName + '.json')) as f:
             menuData = json.load(f)
         mapDifficulty = menuData["menuNav"]["mapDifficulty"]
         map = menuData["menuNav"]["map"]
@@ -583,7 +583,7 @@ class BloonsUIMain(QMainWindow):
 
         # Decrease font size until the text fits within the button
         while font_metrics.boundingRect(text).width() > width or font_metrics.height() > height:
-            max_font_size -= 1
+            max_font_size -= 1.3
             font.setPointSize(max_font_size)
             font_metrics = QFontMetrics(font)
 
