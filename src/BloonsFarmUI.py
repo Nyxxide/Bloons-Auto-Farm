@@ -9,7 +9,7 @@ import cv2
 import pyscreeze
 from PySide6 import QtGui
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFontDatabase, QFont, QAction, QIcon
+from PySide6.QtGui import QFontDatabase, QFont, QAction, QIcon, QFontMetrics
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QMenuBar, \
     QMainWindow, QMenu
 from pynput import mouse
@@ -172,8 +172,8 @@ class BloonsUIMain(QMainWindow):
                                   towerData('f', 1551, 544, 4, 2, 0),
                                   towerData('k', 1581, 622, 2, 3, 0)]
 
-        self.deflationMenuNav = menuNavData("beginner", "monkey_meadow", "easy", "deflation")
-        self.deflation2xMenuNav = menuNavData("beginner", "monkey_meadow", "easy", "deflation")
+        self.deflationMenuNav = menuNavData("expert", "inferno", "easy", "deflation")
+        self.deflation2xMenuNav = menuNavData("expert", "inferno", "easy", "deflation")
 
         # Gen the Pre-made .json Files
         if not os.path.exists('Tower Positions'):
@@ -190,6 +190,7 @@ class BloonsUIMain(QMainWindow):
         self.window = QWidget()
         self.layout = QVBoxLayout()
         self.mainhboxtop = QHBoxLayout()
+        self.mainhboxbotrows = []
         self.mainhboxbot = QHBoxLayout()
         self.runninghbox = QHBoxLayout()
         self.runningvbox = QVBoxLayout()
@@ -208,7 +209,6 @@ class BloonsUIMain(QMainWindow):
         self.mainlabel.setFont(self.custom_font)
 
         self.activeLabel = QLabel('', parent=self.window)
-        self.activeLabel.setFixedSize(615, 50)
         self.custom_font.setPointSize(17)
         self.activeLabel.setFont(self.custom_font)
         self.activeLabel.setAlignment(Qt.AlignCenter)
@@ -219,6 +219,7 @@ class BloonsUIMain(QMainWindow):
         self.menubar = QMenuBar()
         self.editmenu = QMenu("Edit", self.menubar)
 
+        #Add menu options to menu bar
         for file in os.listdir('Tower Positions'):
             if file.endswith('.json'):
                 self.editcoords_action = QAction(file.replace('_', ' ').title().replace('.Json', ''), self)
@@ -227,19 +228,27 @@ class BloonsUIMain(QMainWindow):
 
         self.menubar.addMenu(self.editmenu)
 
-        # Add button widgets to main window
-        self.defbutton = QPushButton('Deflation', parent=self.window)
-        self.defbutton.setFixedSize(200, 100)
-        self.custom_font.setPointSize(20)
-        self.defbutton.setFont(self.custom_font)
-        self.defbutton.clicked.connect(self.startLoop)
+        # Build Farming Buttons
+        self.farm_button_list = []
+        self.buttonnum = 0
+        self.buttonrow = -1
 
-        self.def2xbutton = QPushButton('Deflation 2x Cash', parent=self.window)
-        self.custom_font.setPointSize(15)
-        self.def2xbutton.setFont(self.custom_font)
-        self.def2xbutton.setFixedSize(200, 100)
-        self.def2xbutton.clicked.connect(self.startLoop)
+        for file in os.listdir('Tower Positions'):
+            if file.endswith('.json'):
+                if self.buttonnum % 4 == 0:
+                    self.mainhboxbotrows.append(QHBoxLayout())
+                    self.buttonrow += 1
+                self.startLoopbutton = QPushButton(file.replace('_', ' ').title().replace('.Json', ''), parent=self.window)
+                self.startLoopbutton.setFixedSize(200, 100)
+                self.custom_font.setPointSize(20)
+                self.startLoopbutton.setFont(self.custom_font)
+                self.set_max_font_size(self.startLoopbutton, 20)
+                self.startLoopbutton.clicked.connect(self.startLoop)
+                self.mainhboxbotrows[self.buttonrow].addWidget(self.startLoopbutton)
+                self.farm_button_list.append(self.startLoopbutton)
+                self.buttonnum += 1
 
+        # Build Quit Button
         self.quitbutton = QPushButton('Quit to Menu', parent=self.window)
         self.quitbutton.hide()
         self.custom_font.setPointSize(20)
@@ -249,12 +258,11 @@ class BloonsUIMain(QMainWindow):
 
         # Add Widgets and set up layout of main UI page
         self.mainhboxtop.addWidget(self.mainlabel)
-        self.mainhboxbot.addWidget(self.defbutton)
-        self.mainhboxbot.addWidget(self.def2xbutton)
         self.layout.setAlignment(self.mainhboxtop, Qt.AlignCenter)
         self.layout.setAlignment(self.mainhboxbot, Qt.AlignCenter)
         self.layout.addLayout(self.mainhboxtop)
-        self.layout.addLayout(self.mainhboxbot)
+        for rows in self.mainhboxbotrows:
+            self.layout.addLayout(rows)
 
         # Add Widgets and set up layout of Deflation/Deflation 2x Cash pages
         self.runningvbox.addWidget(self.activeLabel)
@@ -378,8 +386,8 @@ class BloonsUIMain(QMainWindow):
 
 
 
-    # Separate methods to run in the buttons
-    def deflation(self):
+    # Looping Farm Function
+    def farmLoop(self):
         while self.running:
             imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/homemenu.png')), confidence=0.9)
             while imageToFind is None:
@@ -537,11 +545,12 @@ class BloonsUIMain(QMainWindow):
         self.activeLabel.show()
         self.quitbutton.show()
         self.mainlabel.hide()
-        self.defbutton.hide()
-        self.def2xbutton.hide()
-        self.thread = threading.Thread(target=self.deflation, daemon=True)
+        for button in self.farm_button_list:
+            button.hide()
+        self.thread = threading.Thread(target=self.farmLoop, daemon=True)
         self.thread.start()
 
+    # Define button functionality for quit button
     def quit(self):
         self.running = False
         self.activeFile = ''
@@ -549,8 +558,8 @@ class BloonsUIMain(QMainWindow):
         self.activeLabel.setText('')
         self.quitbutton.hide()
         self.mainlabel.show()
-        self.defbutton.show()
-        self.def2xbutton.show()
+        for button in self.farm_button_list:
+            button.show()
         self.thread.join()
 
 
@@ -564,6 +573,21 @@ class BloonsUIMain(QMainWindow):
             resolved_path = os.path.abspath(os.path.join(os.getcwd(), path))
 
         return resolved_path
+
+    def set_max_font_size(self, button, max_font_size):
+        font = button.font()
+        font_metrics = QFontMetrics(font)
+        text = button.text()
+        width = button.width()
+        height = button.height()
+
+        # Decrease font size until the text fits within the button
+        while font_metrics.boundingRect(text).width() > width or font_metrics.height() > height:
+            max_font_size -= 1
+            font.setPointSize(max_font_size)
+            font_metrics = QFontMetrics(font)
+
+        button.setFont(font)
 
     # Run program
     def run(self):
