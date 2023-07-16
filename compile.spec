@@ -59,7 +59,7 @@ exe = EXE(pyz,
 
                      ('Resources/Mode/deflation.png', 'src/Resources/Mode/deflation.png', "DATA")
                      
-                     ]
+                     ],
           [],
           exclude_binaries=True,
           name=os.path.join('dist', 'BloonsUIFarm' + ('.exe' if sys.platform == 'win32' else '')),
