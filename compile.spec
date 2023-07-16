@@ -57,8 +57,7 @@ exe = EXE(pyz,
 
 # Build a .app if on OS X
 if sys.platform == 'darwin':
-   app = BUNDLE(coll,
+   app = BUNDLE(exe,
                 name='BloonsFarmUI.app',
-                icon='src/Resources/UI/btdfarmicon.ico',
-                bundle_identifier=None)
+                icon='src/Resources/UI/btdfarmicon.ico')
   
