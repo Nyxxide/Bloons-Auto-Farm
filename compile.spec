@@ -57,14 +57,6 @@ exe = EXE(pyz,
 
 # Build a .app if on OS X
 if sys.platform == 'darwin':
-   coll = COLLECT(exe,
-                  a.binaries,
-                  a.zipfiles,
-                  a.datas,
-                  strip=False,
-                  upx=True,
-                  upx_exclude=[],
-                  name='BloonsFarmUI')
    app = BUNDLE(coll,
                 name='BloonsFarmUI.app',
                 icon='src/Resources/UI/btdfarmicon.ico',
