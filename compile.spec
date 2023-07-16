@@ -72,7 +72,7 @@ exe = EXE(pyz,
           codesign_identity=None,
           icon='src/Resources/UI/btdfarmicon.ico',
           entitlements_file=None )
-if sys.platform == 'darwin'
+if sys.platform == 'darwin':
    coll = COLLECT(exe,
                   a.binaries,
                   a.zipfiles,
