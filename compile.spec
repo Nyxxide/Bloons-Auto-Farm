@@ -1,18 +1,12 @@
 import sys
 
-a = Analysis(['src/BloonsFarmUI.py'],
-             hiddenimports=['keyboard', 'pyautogui', 'pyqt5', 'pynput', 'cv2', 'pyscreeze'],
-             hookspath=None)
-pyz = PYZ(a.pure)
-exe = EXE(pyz,
-          a.scripts,
-          # Static link the Visual C++ Redistributable DLLs if on Windows
-          a.binaries + [('msvcp100.dll', 'C:\\Windows\\System32\\msvcp100.dll', 'BINARY'),
-                        ('msvcr100.dll', 'C:\\Windows\\System32\\msvcr100.dll', 'BINARY')]
-          if sys.platform == 'win32' else a.binaries,
-          a.zipfiles,
-          a.datas + [
+block_cipher=None
 
+a = Analysis(['src/BloonsFarmUI.py'],
+             pathex=[],
+             binaries=[],
+             datas=[
+             
                      ('Resources/UI/LuckiestGuy-Regular.ttf','src/Resources/UI/LuckiestGuy-Regular.ttf', "DATA"),('Resources/UI/btdfarmicon.ico', 'src/Resources/UI/btdfarmicon.ico', "DATA"),
                      ('Resources/UI/btdfarmicon.icns', 'src/Resources/UI/btdfarmicon.icns', "DATA"),
 
@@ -46,39 +40,49 @@ exe = EXE(pyz,
                      ('Resources/Difficulty/hard.png', 'src/Resources/Difficulty/hard.png', "DATA"),
 
                      ('Resources/Mode/deflation.png', 'src/Resources/Mode/deflation.png', "DATA")
-
+                     
                      ],
-          name=os.path.join('dist', 'BloonsFarmUI' + ('.exe' if sys.platform == 'win32' else '')),
+             hiddenimports=['keyboard', 'pyautogui', 'pyqt5', 'pynput', 'cv2', 'pyscreeze'],
+             hookspath=None,
+             hooksconfig={},
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+
+exe = EXE(pyz,
+          a.scripts,
+          a.binaries + [('msvcp100.dll', 'C:\\Windows\\System32\\msvcp100.dll', 'BINARY'),
+                        ('msvcr100.dll', 'C:\\Windows\\System32\\msvcr100.dll', 'BINARY')]
+          if sys.platform == 'win32' else a.binaries,
+          [],
+          exclude_binaries=True,
+          name=os.path.join('dist', 'BloonsUIFarm' + ('.exe' if sys.platform == 'win32' else '')),
           debug=False,
+          bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           console=False,
-          icon='src/Resources/UI/btdfarmicon.ico')
-
-# Build a .app if on OS X
-if sys.platform == 'darwin':
-   app = BUNDLE(exe,
+          disable_windowed_traceback=False,
+          target_arch=None,
+          codesign_identity=None,
+          icon='src/Resources/UI/btdfarmicon.ico',
+          entitlements_file=None )
+if sys.platform == 'darwin'
+   coll = COLLECT(exe,
+                  a.binaries,
+                  a.zipfiles,
+                  a.datas,
+                  strip=False,
+                  upx=True,
+                  upx_exclude=[],
+                  name='BloonsUIFarm')
+   app = BUNDLE(coll,
                 name='BloonsFarmUI.app',
-                icon='src/Resources/UI/btdfarmicon.ico')
-   import plistlib
-   from pathlib import Path
-   app_path = Path(app.name)
-
-   # read Info.plist
-   with open(app_path / 'Contents/Info.plist', 'rb') as f:
-      pl = plistlib.load(f)
-
-   # write Info.plist
-   with open(app_path / 'Contents/Info.plist', 'wb') as f:
-      pl['CFBundleExecutable'] = 'wrapper'
-      plistlib.dump(pl, f)
-
-   # write new wrapper script
-   shell_script = """#!/bin/bash
-   dir=$(dirname $0)
-   open -a Terminal file://${dir}/%s""" % app.appname
-   with open(app_path / 'Contents/MacOS/wrapper', 'w') as f:
-      f.write(shell_script)
-
-   # make it executable
-   (app_path  / 'Contents/MacOS/wrapper').chmod(0o755)
+                icon='src/Resources/UI/btdfarmico.icns',
+                bundle_identifier=None)
+  
