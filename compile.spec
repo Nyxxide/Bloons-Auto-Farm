@@ -83,6 +83,6 @@ if sys.platform == 'darwin':
                   name='BloonsUIFarm')
    app = BUNDLE(coll,
                 name='BloonsFarmUI.app',
-                icon='src/Resources/UI/btdfarmico.icns',
+                icon='src/Resources/UI/btdfarmico.ico',
                 bundle_identifier=None)
   
