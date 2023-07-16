@@ -1,29 +1,18 @@
 import sys
 
-block_cipher=None
-
 a = Analysis(['src/BloonsFarmUI.py'],
-             pathex=[],
-             binaries=[],
-             datas=[],
              hiddenimports=['keyboard', 'pyautogui', 'pyqt5', 'pynput', 'cv2', 'pyscreeze'],
-             hookspath=None,
-             runtime_hooks=[],
-             excludes=[],
-             win_no_prefer_redirects=False,
-             win_private_assemblies=False,
-             cipher=block_cipher,
-             noarchive=False)
-pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
-
+             hookspath=None)
+pyz = PYZ(a.pure)
 exe = EXE(pyz,
           a.scripts,
+          # Static link the Visual C++ Redistributable DLLs if on Windows
           a.binaries + [('msvcp100.dll', 'C:\\Windows\\System32\\msvcp100.dll', 'BINARY'),
                         ('msvcr100.dll', 'C:\\Windows\\System32\\msvcr100.dll', 'BINARY')]
           if sys.platform == 'win32' else a.binaries,
+          a.zipfiles,
           a.datas + [
-             
+
                      ('Resources/UI/LuckiestGuy-Regular.ttf','src/Resources/UI/LuckiestGuy-Regular.ttf', "DATA"),('Resources/UI/btdfarmicon.ico', 'src/Resources/UI/btdfarmicon.ico', "DATA"),
                      ('Resources/UI/btdfarmicon.icns', 'src/Resources/UI/btdfarmicon.icns', "DATA"),
 
@@ -57,17 +46,16 @@ exe = EXE(pyz,
                      ('Resources/Difficulty/hard.png', 'src/Resources/Difficulty/hard.png', "DATA"),
 
                      ('Resources/Mode/deflation.png', 'src/Resources/Mode/deflation.png', "DATA")
-                     
+
                      ],
-          [],
-          name=os.path.join('dist', 'BloonsUIFarm' + ('.exe' if sys.platform == 'win32' else '')),
+          name=os.path.join('dist', 'BloonsFarmUI' + ('.exe' if sys.platform == 'win32' else '')),
           debug=False,
-          bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           console=False,
-          icon='src/Resources/UI/btdfarmicon.ico',
-          )
+          icon='src/Resources/UI/btdfarmicon.ico')
+
+# Build a .app if on OS X
 if sys.platform == 'darwin':
    coll = COLLECT(exe,
                   a.binaries,
@@ -76,7 +64,7 @@ if sys.platform == 'darwin':
                   strip=False,
                   upx=True,
                   upx_exclude=[],
-                  name='BloonsUIFarm')
+                  name='BloonsFarmUI')
    app = BUNDLE(coll,
                 name='BloonsFarmUI.app',
                 icon='src/Resources/UI/btdfarmicon.ico',
