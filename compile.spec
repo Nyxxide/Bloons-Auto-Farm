@@ -5,7 +5,25 @@ block_cipher=None
 a = Analysis(['src/BloonsFarmUI.py'],
              pathex=[],
              binaries=[],
-             datas=[
+             datas=[],
+             hiddenimports=['keyboard', 'pyautogui', 'pyqt5', 'pynput', 'cv2', 'pyscreeze'],
+             hookspath=None,
+             hooksconfig={},
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+
+exe = EXE(pyz,
+          a.scripts,
+          a.binaries + [('msvcp100.dll', 'C:\\Windows\\System32\\msvcp100.dll', 'BINARY'),
+                        ('msvcr100.dll', 'C:\\Windows\\System32\\msvcr100.dll', 'BINARY')]
+          if sys.platform == 'win32' else a.binaries,
+          a.datas + [
              
                      ('Resources/UI/LuckiestGuy-Regular.ttf','src/Resources/UI/LuckiestGuy-Regular.ttf', "DATA"),('Resources/UI/btdfarmicon.ico', 'src/Resources/UI/btdfarmicon.ico', "DATA"),
                      ('Resources/UI/btdfarmicon.icns', 'src/Resources/UI/btdfarmicon.icns', "DATA"),
@@ -41,24 +59,7 @@ a = Analysis(['src/BloonsFarmUI.py'],
 
                      ('Resources/Mode/deflation.png', 'src/Resources/Mode/deflation.png', "DATA")
                      
-                     ],
-             hiddenimports=['keyboard', 'pyautogui', 'pyqt5', 'pynput', 'cv2', 'pyscreeze'],
-             hookspath=None,
-             hooksconfig={},
-             runtime_hooks=[],
-             excludes=[],
-             win_no_prefer_redirects=False,
-             win_private_assemblies=False,
-             cipher=block_cipher,
-             noarchive=False)
-pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
-
-exe = EXE(pyz,
-          a.scripts,
-          a.binaries + [('msvcp100.dll', 'C:\\Windows\\System32\\msvcp100.dll', 'BINARY'),
-                        ('msvcr100.dll', 'C:\\Windows\\System32\\msvcr100.dll', 'BINARY')]
-          if sys.platform == 'win32' else a.binaries,
+                     ]
           [],
           exclude_binaries=True,
           name=os.path.join('dist', 'BloonsUIFarm' + ('.exe' if sys.platform == 'win32' else '')),
