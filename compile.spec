@@ -60,18 +60,14 @@ exe = EXE(pyz,
                      
                      ],
           [],
-          exclude_binaries=True,
           name=os.path.join('dist', 'BloonsUIFarm' + ('.exe' if sys.platform == 'win32' else '')),
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           console=False,
-          disable_windowed_traceback=False,
-          target_arch=None,
-          codesign_identity=None,
           icon='src/Resources/UI/btdfarmicon.ico',
-          entitlements_file=None )
+          )
 if sys.platform == 'darwin':
    coll = COLLECT(exe,
                   a.binaries,
