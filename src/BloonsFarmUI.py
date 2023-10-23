@@ -161,6 +161,7 @@ class BloonsUICoords(QMainWindow):
 class BloonsUIMain(QMainWindow):
     def __init__(self):
         self.BloonsUI = QApplication([])
+        # TODO: QApplication.setStyle('Fusion')
         super().__init__()
         # Tower setup
         self.deflationTowers = [towerData('d', 824, 366, 4, 0, 2),
