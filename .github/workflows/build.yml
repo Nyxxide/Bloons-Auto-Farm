@@ -58,7 +58,7 @@ jobs:
 
       - name: Release
         run: |
-          gh release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} 'dist/BloonsFarmUI.exe'
+          gh release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
