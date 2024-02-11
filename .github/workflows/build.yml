@@ -58,7 +58,7 @@ jobs:
 
       - name: Release
         run: |
-          gh release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -t ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+          gh release upload ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} 'dist/BloonsFarmUi.exe'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
@@ -89,6 +89,6 @@ jobs:
         run: |
           # Rename the mac executable so it doesn't share a name with the linux executable
           mv dist/BloonsFarmUI dist/BloonsFarmUi_macOS
-          gh release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -t ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} 'dist/BloonsFarmUi_macOS'
+          gh release upload ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} 'dist/BloonsFarmUi_macOS'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
