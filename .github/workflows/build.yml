@@ -58,7 +58,7 @@ jobs:
 
       - name: Release
         run: |
-          gh release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+          gh release edit ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }} -t ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
