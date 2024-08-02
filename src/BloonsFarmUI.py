@@ -462,8 +462,7 @@ class BloonsUIMain(QMainWindow):
                                                        confidence=0.9)
                 while imageToFind is not None:
                     print("waiting for tooltip to despawn")
-                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/tooltipcheck.png')),
-                                                           confidence=0.9)
+                    imageToFind = pyscreeze.locateOnScreen((self.resolve_path('Resources/MenuNav/tooltipcheck.png')), confidence=0.9)
             self.towerPlacement(self.activeFile)
             keyboard.press_and_release('space')
             time.sleep(0.25)
