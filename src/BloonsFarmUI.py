@@ -5,7 +5,6 @@ import pyautogui
 import threading
 import keyboard
 import json
-import cv2
 import pyscreeze
 pyscreeze.USE_IMAGE_NOT_FOUND_EXCEPTION = False
 from PySide6 import QtGui
